@@ -11,11 +11,9 @@ var step = 1;
 const len = imgArr.length;
 function showImages() {
 	sliderImg.src = 'i/' + imgArr[step];
-	console.log(sliderImg.src);
 	step++;
 	if (step === len) {
     	step = 0;
     }
 }
 setInterval(showImages, 5000);
-console.log(sliderImg.src);

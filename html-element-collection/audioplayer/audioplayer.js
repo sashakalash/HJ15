@@ -17,14 +17,10 @@ var songsFolder = 'mp3/';
 playBtn.onclick = () =>{
 	player.play();
 	playPauseView.classList.add('play');
-
-
 };
 pauseBtn.onclick = () => {
 	player.pause();
 	playPauseView.classList.remove('play');
-
-
 };
 stopBtn.onclick = () => {
 	player.pause();
@@ -40,7 +36,7 @@ nextBtn.onclick = () => {
 		player.src = songsFolder + playerSongs[i];
 	}
 	player.play();
-	title.title = /.*?\./.exec(playerSongs[i]);
+	title.title = playerSongs[i].replace(/\.[^\.]*$/, '');
 };
 backBtn.onclick = () => {
 	i--;
@@ -51,5 +47,5 @@ backBtn.onclick = () => {
 		player.src = songsFolder + playerSongs[i];
 	}
 	player.play();
-	title.title = /.*?\./.exec(playerSongs[i]);
+	title.title = playerSongs[i].replace(/\.[^\.]*$/, '');
 };

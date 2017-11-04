@@ -12,17 +12,11 @@ const imgArr = [
 var step = 0;
 const len = imgArr.length;
 function nextPhoto() {
-	step++;
-	if(step === len) {
-		step = 0;
-	}
+	step + 1 === len? step = 0: step++;
 	sliderImg.src = imgArr[step];
 }
 function prevPhoto() {
-	step--;
-	if(step < 0) {
-		step = len - 1;
-	}
+	step - 1 < 0? step = len - 1: step--;
 	sliderImg.src = imgArr[step];
 }
 next.onclick = nextPhoto;

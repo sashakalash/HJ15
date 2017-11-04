@@ -36,6 +36,7 @@ nextBtn.onclick = () => {
 		player.src = songsFolder + playerSongs[i];
 	}
 	player.play();
+	playPauseView.classList.add('play');
 	title.title = playerSongs[i].replace(/\.[^\.]*$/, '');
 };
 backBtn.onclick = () => {
@@ -47,5 +48,6 @@ backBtn.onclick = () => {
 		player.src = songsFolder + playerSongs[i];
 	}
 	player.play();
+	playPauseView.classList.add('play');
 	title.title = playerSongs[i].replace(/\.[^\.]*$/, '');
 };

@@ -1,32 +1,37 @@
 const playPauseView = document.getElementsByClassName('mediaplayer')[0];
-const playBtn = document.getElementsByClassName('fa fa-play')[0];
-const pauseBtn = document.getElementsByClassName('fa fa-pause')[0];
 const player = document.getElementsByTagName('audio')[0];
-const stopBtn = document.getElementsByClassName('fa fa-stop')[0];
-const nextBtn = document.getElementsByClassName('fa fa-forward')[0];
-const backBtn = document.getElementsByClassName('fa fa-backward')[0];
 const controls = document.getElementsByClassName('controls')[0];
+const playBtn = document.getElementsByClassName('playstate')[0];
+const stopBtn = controls.getElementsByClassName('stop')[0];
+const nextBtn = controls.getElementsByClassName('next')[0];
+const backBtn = controls.getElementsByClassName('back')[0];
 const title = controls.getElementsByTagName('span')[0];
 const playerSongs = [
 	'LA Chill Tour.mp3',
 	'LA Fusion Jam.mp3',
 	'This is it band.mp3'
 ];
+
 var i = 0;
 var songsFolder = 'mp3/';
-playBtn.onclick = () =>{
-	player.play();
-	playPauseView.classList.add('play');
+playBtn.onclick = () => {
+	if(playPauseView.classList.contains('play')) {
+		playPauseView.classList.remove('play');	
+		playPauseView.classList.add('pause');
+		player.pause();
+	} else {
+		playPauseView.classList.remove('pause');
+		playPauseView.classList.add('play');
+		player.play();	
+	}
 };
-pauseBtn.onclick = () => {
-	player.pause();
-	playPauseView.classList.remove('play');
-};
+
 stopBtn.onclick = () => {
 	player.pause();
 	player.currentTime = 0;
 	playPauseView.classList.remove('play');
 };
+
 nextBtn.onclick = () => {
 	i++;
 	if(i === playerSongs.length) {
@@ -39,6 +44,7 @@ nextBtn.onclick = () => {
 	playPauseView.classList.add('play');
 	title.title = playerSongs[i].replace(/\.[^\.]*$/, '');
 };
+
 backBtn.onclick = () => {
 	i--;
 	if(i < 0) {

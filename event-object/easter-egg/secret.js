@@ -8,7 +8,7 @@ function showSecret(event) {
 			secret.classList.add('visible');
 		}
 		secretCounter++;
-	} else if(event.keyCode == codeToAccessEng[secretCounter]){
+	} else if(event.keyCode == codeToAccessEng[secretCounter]) {
 		if(secretCounter === codeToAccessEng.length - 1) {
 			secret.classList.add('visible');
 		}
@@ -27,7 +27,6 @@ function showMenu(event) {
 		} else {
 			menu.classList.remove('visible');
 		}
-		
 	}
 }
 

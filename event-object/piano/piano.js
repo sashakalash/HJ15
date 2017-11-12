@@ -11,20 +11,19 @@ const melodys = [
 function selectTone(event) {
 	switch (event.type) {
 		case 'keydown':
-			if(event.keyCode == '18'){
+			if(event.keyCode == '18') {
 			piano.classList.toggle('higher');
-			} else if(event.keyCode == '16'){
+			} else if(event.keyCode == '16') {
 			piano.classList.toggle('lower');
 			}
 		break;
 		case 'keyup':
 			if(event.keyCode == '18') {
 			piano.classList.remove('higher');
-			} else if(event.keyCode == '16'){
+			} else if(event.keyCode == '16') {
 			piano.classList.remove('lower');
 			}
 		break;
-
 	}         	
 }
 

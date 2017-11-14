@@ -16,6 +16,9 @@ function openStartTab() {
 
 function pushTab(event) {
 	event.preventDefault();
+	if(tab.classList.contains('active')) {
+		return;
+	}
 	for(const tab of tabs) {
 		tab.classList.remove('active');
 	} 

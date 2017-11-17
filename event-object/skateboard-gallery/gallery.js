@@ -1,4 +1,4 @@
-const gallery = document.getElementsByClassName('gallery-nav')[0];
+tconst gallery = document.getElementsByClassName('gallery-nav')[0];
 const imagesLinks = gallery.getElementsByTagName('a');
 const imgViewer = document.getElementsByClassName('gallery-view')[0];
 

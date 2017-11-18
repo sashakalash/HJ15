@@ -10,7 +10,7 @@ const messageField = document.querySelector('.form-group textarea');
 
 for(const itemField of inputFields) {
     if(itemField.name === 'zip') {
-        itemField.pattern = '[0-9]';
+        itemField.setAttribute('pattern', '[0-9]');
     }
     itemField.addEventListener('change', setValue);
 }
@@ -21,7 +21,7 @@ function setValue() {
     let fieldName = this.name;
     let fieldValue = this.value;
     outputMessageFields.forEach(output => {
-        if(output.name === fieldName) {
+        if(output.id === fieldName) {
             output.value = fieldValue;
         }
     });
@@ -30,6 +30,7 @@ function setValue() {
 
 function validateChecking() {
     let fieldsCounter = 0;
+    let summOfFields = 11;
     for(const itemField of inputFields) {
         if(itemField.value) {
             fieldsCounter++;
@@ -39,10 +40,11 @@ function validateChecking() {
         fieldsCounter++;
     }
     console.log(fieldsCounter);
-    if(fieldsCounter === 11) {
+    if(fieldsCounter === summOfFields) {
         sendMessageBtn.removeAttribute('disabled');
         sendMessageBtn.addEventListener('click', () => {
             contentform.classList.add('hidden');
+            contentform.removeAttribute('novalidate');
             outputMessage.classList.remove('hidden');
         });
     } else {
@@ -51,6 +53,7 @@ function validateChecking() {
 }
 
 changeMessageBtn.addEventListener('click', () => {
+    contentform.setAttribute('novalidate', true);
     contentform.classList.remove('hidden');
     outputMessage.classList.add('hidden');
 });

@@ -46,8 +46,8 @@ function validateChecking() {
     }
     sendMessageBtn.disabled = false;
     sendMessageBtn.addEventListener('click', () => {
-        contentform.classList.add('hidden');
         contentform.removeAttribute('novalidate');
+        contentform.classList.add('hidden');
         outputMessage.classList.remove('hidden');
     });
 }

@@ -8,14 +8,20 @@ const outputMessage = document.querySelector('#output');
 const outputMessageFields = document.querySelectorAll('#output output');
 const messageField = document.querySelector('.form-group textarea');
 
+messageField.addEventListener('change', setValue);
+messageField.addEventListener('input', validateChecking);
+
 for(const itemField of inputFields) {
     if(itemField.name === 'zip') {
-        itemField.setAttribute('pattern', '[0-9]');
+        itemField.addEventListener('keyup', () => {
+            itemField.value = itemField.value.replace(/[\D]+/g, '');
+        });
     }
     itemField.addEventListener('change', setValue);
+    itemField.addEventListener('input', validateChecking);
 }
 
-messageField.addEventListener('change', setValue);
+
 
 function setValue() {
     let fieldName = this.name;
@@ -25,31 +31,25 @@ function setValue() {
             output.value = fieldValue;
         }
     });
-    validateChecking();  
 }
 
 function validateChecking() {
-    let fieldsCounter = 0;
-    let summOfFields = 11;
     for(const itemField of inputFields) {
-        if(itemField.value) {
-            fieldsCounter++;
-        }
+       if(!itemField.value) {
+            sendMessageBtn.disabled = true;
+            return;
+       }
     }
-    if(messageField.value) {
-        fieldsCounter++;
-    }
-    console.log(fieldsCounter);
-    if(fieldsCounter === summOfFields) {
-        sendMessageBtn.removeAttribute('disabled');
-        sendMessageBtn.addEventListener('click', () => {
-            contentform.classList.add('hidden');
-            contentform.removeAttribute('novalidate');
-            outputMessage.classList.remove('hidden');
-        });
-    } else {
+    if(!messageField.value) {
+        sendMessageBtn.disabled = true;
         return;
-    }  
+    }
+    sendMessageBtn.disabled = false;
+    sendMessageBtn.addEventListener('click', () => {
+        contentform.classList.add('hidden');
+        contentform.removeAttribute('novalidate');
+        outputMessage.classList.remove('hidden');
+    });
 }
 
 changeMessageBtn.addEventListener('click', () => {

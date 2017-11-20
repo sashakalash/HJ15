@@ -10,7 +10,7 @@ for(const article of articleList) {
     if(article.dataset) {
         let tab = demoTab.cloneNode(true);
         tab.firstElementChild.textContent = article.dataset.tabTitle;
-        tab.firstElementChild.classList.add('article.dataset.tabIcon');
+        tab.firstElementChild.classList.add(article.dataset.tabIcon);
         tabsMenu.appendChild(tab);
     }
 }
@@ -40,7 +40,6 @@ function tabSwitcher(event) {
     }
     this.classList.add('ui-tabs-active');
 }
-
 
 for(const tab of menuPoints) {
     tab.addEventListener('click', tabSwitcher);

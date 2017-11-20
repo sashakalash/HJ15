@@ -10,36 +10,38 @@ for(const article of articleList) {
     if(article.dataset) {
         let tab = demoTab.cloneNode(true);
         tab.firstElementChild.textContent = article.dataset.tabTitle;
-        tab.firstElementChild.classList.add(article.dataset.tabIcon);
+        tab.firstElementChild.classList.add('article.dataset.tabIcon');
         tabsMenu.appendChild(tab);
     }
 }
 
-const menuPoints = tabsMenu.querySelectorAll('li');
-const articles = tabsMenu.querySelectorAll('li > a');
+const menuPoints = tabsMenu.children;
 
-for(const article of articles) {
+for(const article of articleList) {
     article.classList.add('hidden');
 }
 
 tabsMenu.firstElementChild.classList.add('ui-tabs-active');
-articles[0].classList.remove('hidden');
+articleList[0].classList.remove('hidden');
 
 function tabSwitcher(event) {
     if(event.target.classList.contains('ui-tabs-active')) {
-        console.log('зашел')
         return;
-    }
+    } 
+    let currentArticleClass = this.querySelector('a').textContent; 
     for(const tab of menuPoints) {
-        event.target.classList.remove('ui-tabs-active');
-        event.target.classList.add('hidden');
+        tab.classList.remove('ui-tabs-active');
     }
-    this.classList.remove('hidden');
+    for(const article of articleList) {
+        article.classList.add('hidden');
+        if(article.dataset.tabTitle === currentArticleClass) {
+            article.classList.remove('hidden');
+        }
+    }
     this.classList.add('ui-tabs-active');
 }
 
 
 for(const tab of menuPoints) {
-    console.log(tab)
     tab.addEventListener('click', tabSwitcher);
 }

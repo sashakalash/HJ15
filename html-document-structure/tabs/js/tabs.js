@@ -1,6 +1,6 @@
 
 const content = document.querySelector('.tabs-content');
-const articleList = content.childNodes;
+const articleList = content.children;
 const tabsMenu = document.querySelector('.tabs-nav');
 const itemNav = tabsMenu.querySelector('li');
 const demoTab = itemNav.cloneNode(true);
@@ -9,25 +9,37 @@ itemNav.parentNode.removeChild(itemNav);
 for(const article of articleList) {
     if(article.dataset) {
         let tab = demoTab.cloneNode(true);
-        tab.firstChild.textContent = article.dataset.tabTitle;
-        tab.firstChild.className = article.dataset.tabIcon;
+        tab.firstElementChild.textContent = article.dataset.tabTitle;
+        tab.firstElementChild.classList.add(article.dataset.tabIcon);
         tabsMenu.appendChild(tab);
     }
 }
 
-content.firstElementChild.classList.add('ui-tabs-active');
-
 const menuPoints = tabsMenu.querySelectorAll('li');
-for(const tab of menuPoints) {
-    tab.addEventListener('click', () => {   
-       
-        tab.classList.remove('hidden');
-        tab.classList.add('ui-tabs-active');
+const articles = tabsMenu.querySelectorAll('li > a');
 
-    });
+for(const article of articles) {
+    article.classList.add('hidden');
 }
 
-// Для того чтобы задать текущий таб добавьте ему класс ui-tabs-active. 
-// При открытии текущим должен быть выбран первый таб.
+tabsMenu.firstElementChild.classList.add('ui-tabs-active');
+articles[0].classList.remove('hidden');
 
-// Для скрытия неактивных статей используйте класс hidden.
+function tabSwitcher(event) {
+    if(event.target.classList.contains('ui-tabs-active')) {
+        console.log('зашел')
+        return;
+    }
+    for(const tab of menuPoints) {
+        event.target.classList.remove('ui-tabs-active');
+        event.target.classList.add('hidden');
+    }
+    this.classList.remove('hidden');
+    this.classList.add('ui-tabs-active');
+}
+
+
+for(const tab of menuPoints) {
+    console.log(tab)
+    tab.addEventListener('click', tabSwitcher);
+}

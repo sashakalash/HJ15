@@ -11,17 +11,17 @@ const melodys = [
 function selectTone(event) {
 	switch (event.type) {
 		case 'keydown':
-			if(event.keyCode == '18') {
-			piano.classList.toggle('higher');
-			} else if(event.keyCode == '16') {
-			piano.classList.toggle('lower');
+			if (event.keyCode == '18') {
+				piano.classList.toggle('higher');
+			} else if (event.keyCode == '16') {
+				piano.classList.toggle('lower');
 			}
 		break;
 		case 'keyup':
-			if(event.keyCode == '18') {
-			piano.classList.remove('higher');
-			} else if(event.keyCode == '16') {
-			piano.classList.remove('lower');
+			if (event.keyCode == '18') {
+				piano.classList.remove('higher');
+			} else if (event.keyCode == '16') {
+				piano.classList.remove('lower');
 			}
 		break;
 	}         	
@@ -31,9 +31,9 @@ document.addEventListener('keydown', selectTone);
 document.addEventListener('keyup', selectTone);
 
 function getTone() {
-	if(piano.classList.contains('higher')) {
+	if (piano.classList.contains('higher')) {
 		return 'higher/';
-	} else if(piano.classList.contains('lower')) {
+	} else if (piano.classList.contains('lower')) {
 		return 'lower/';
 	} else {
 		return 'middle/';
@@ -41,10 +41,10 @@ function getTone() {
 }
 
 Array.from(buttons).forEach((btn, i) => {
-  btn.addEventListener('click', () => {
-    let player = btn.getElementsByTagName('audio')[0];
-    player.src = 'sounds/' + getTone() + melodys[i];
-    player.play();
-  });
+	btn.addEventListener('click', () => {
+    	let player = btn.getElementsByTagName('audio')[0];
+    	player.src = 'sounds/' + getTone() + melodys[i];
+    	player.play();
+	});
 });
 

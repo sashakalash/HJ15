@@ -1,18 +1,17 @@
 'use strict';
 
 function handleTableClick(event) {
-    const tableHeaders = Array.from(document.querySelectorAll('th'));
-    const table = document.querySelector('tr');
-    tableHeaders.forEach((th) => {
-        th.addEventListener('click', (event) => {
-            table.dataset.sortBy = event.currentTarget.dataset.propName;         
-            if (!event.currentTarget.dataset.dir || event.currentTarget.dataset.dir === '1') {
-                sortTable(event.currentTarget.dataset.propName, - 1);
-                event.currentTarget.dataset.dir = '- 1';
-            } else if(event.currentTarget.dataset.dir === '- 1'){
-                sortTable(event.currentTarget.dataset.propName, 1);
-                event.currentTarget.dataset.dir = '1';
+    const table = document.querySelector('table');
+    table.addEventListener('click', (event) => {
+        if(event.target.dataset.propName) {
+            table.dataset.sortBy = event.target.dataset.propName; 
+            if (!event.target.dataset.dir || event.target.dataset.dir === '1') {
+                sortTable(event.target.dataset.propName, - 1);
+                event.target.dataset.dir = '- 1';
+            } else if(event.target.dataset.dir === '- 1'){
+                sortTable(event.target.dataset.propName, 1);
+                event.target.dataset.dir = '1';
             }
-        });
+        }
     });
 }

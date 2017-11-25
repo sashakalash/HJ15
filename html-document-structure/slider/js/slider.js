@@ -30,20 +30,10 @@ function moveSlider(way) {
     const activatedSlide = getActiveSlide(way);
     currentSlide.classList.remove('slide-current');
     activatedSlide.classList.add('slide-current');
-    if(!activatedSlide.nextElementSibling) {
-        nextBtn.classList.add('disabled');
-        lastBtn.classList.add('disabled');
-    } else {
-        nextBtn.classList.remove('disabled');
-        lastBtn.classList.remove('disabled');
-    }
-    if(!activatedSlide.previousElementSibling) {
-        prevBtn.classList.add('disabled');
-        firstBtn.classList.add('disabled');
-    } else {
-        prevBtn.classList.remove('disabled');
-        firstBtn.classList.remove('disabled');
-    }
+    nextBtn.classList.toggle('disabled', !activatedSlide.nextElementSibling);
+    lastBtn.classList.toggle('disabled', !activatedSlide.nextElementSibling);
+    prevBtn.classList.toggle('disabled', !activatedSlide.previousElementSibling);
+    firstBtn.classList.toggle('disabled', !activatedSlide.previousElementSibling);
     currentSlide = activatedSlide;
 }
 

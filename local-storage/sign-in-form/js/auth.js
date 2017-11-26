@@ -16,10 +16,21 @@ signInRequest.addEventListener('load', signIn);
 signInRequest.open('POST', 'https://neto-api.herokuapp.com/signin');
 signInRequest.setRequestHeader('Content-Type', 'application/json');
 
-signUpForm.addEventListener('submit', signUpRequest.send(JSON.stringify(signUpFormData)));
-signInForm.addEventListener('submit', signInRequest.send(JSON.stringify(signInFormData)));
+signUpForm.addEventListener('submit', sendSingUpRequest);
+signInForm.addEventListener('submit', sendSingInRequest);
+
+function sendSingUpRequest(event) {
+	event.preventDefault();
+	signUpRequest.send(JSON.stringify(signUpFormData));	
+}
+
+function sendSingInRequest() {
+	event.preventDefault();
+	signInRequest.send(JSON.stringify(signInFormData));
+}
 
 function signUp() {
+	console.log('ok')
 	const answer = JSON.parse(signUpRequest.responseText);
 	if (answer.error) {
 		signUpMessage.textContent = answer.message;
@@ -29,6 +40,8 @@ function signUp() {
 }
 
 function signIn() {
+	console.log('ok')
+	
 	const answer = JSON.parse(signInRequest.responseText);
 	if (answer.error) {
 		signInMessage.textContent = answer.message;

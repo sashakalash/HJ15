@@ -122,15 +122,19 @@ function addToCartReq() {
 		})
 		.then((res) => res.json())
 		.then((data) => {
+			if(data.error) {
+				return;
+			}
+			console.log(data)
 			cartCondition = data;
 			setCartCondition();
 		});
+	
 }
 
-const removeFromCartBtn = document.querySelector('.quick-cart-product-remove remove');
 const removeItem = new FormData();
-removeItem.append('productId', removeFromCartBtn.productId);
-removeFromCartBtn.addEventListener('click', removeFromCart);
+removeItem.append('productId', quickCart.productId);
+quickCart.addEventListener('click', removeFromCart);
 
 function removeFromCart(event) {
 	event.preventDefault();
@@ -149,6 +153,9 @@ function removeFromCart(event) {
 		})
 		.then((res) => res.json())
 		.then((data) => {
+			if(data.error) {
+				return;
+			}
 			cartCondition = data;
 			setCartCondition();
 		});

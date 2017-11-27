@@ -9,7 +9,7 @@ sizeAvailbleList.addEventListener('load', setSizeAvailble);
 sizeAvailbleList.open('GET', 'https://neto-api.herokuapp.com/cart/sizes');
 sizeAvailbleList.send();
 
-var cartCondition = new XMLHttpRequest();
+const cartCondition = new XMLHttpRequest();
 cartCondition.addEventListener('load', setCartCondition);
 cartCondition.open('GET', 'https://neto-api.herokuapp.com/cart');
 cartCondition.send();
@@ -103,60 +103,27 @@ const orderDataForm = document.querySelector('#AddToCartForm');
 const orderData = new FormData(orderDataForm);
 const addToCartBtn = document.querySelector('#AddToCart');
 orderData.append('productId', orderDataForm.dataset.productId);
-addToCartBtn.addEventListener('click', addToCartReq);
-
-function addToCartReq() {
+addToCartBtn.addEventListener('click', () => { 
 	event.preventDefault();
-	fetch('https://neto-api.herokuapp.com/cart', {
-		body: JSON.stringify(orderData),
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		}
-	})
-		.then((res) => {
-			if (200 <= res.status && res.status < 300) {
-				return res;
-			}
-			throw new Error(res.statusText);
-		})
-		.then((res) => res.json())
-		.then((data) => {
-			if(data.error) {
-				return;
-			}
-			console.log(data)
-			cartCondition = data;
-			setCartCondition();
-		});
-	
-}
+	var xhr = new XMLHttpRequest();
+	xhr.open('POST', 'https://neto-api.herokuapp.com/cart');
+	xhr.send(orderData);
+	xhr.addEventListener('load', updateCart);
+});
 
 const removeItem = new FormData();
 removeItem.append('productId', quickCart.productId);
-quickCart.addEventListener('click', removeFromCart);
-
-function removeFromCart(event) {
+quickCart.addEventListener('click', () => { 
 	event.preventDefault();
-	fetch('https://neto-api.herokuapp.com/cart/remove', {
-		body: JSON.stringify(removeItem),
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json'
-		}
-	})
-		.then((res) => {
-			if (200 <= res.status && res.status < 300) {
-				return res;
-			}
-			throw new Error(res.statusText);
-		})
-		.then((res) => res.json())
-		.then((data) => {
-			if(data.error) {
-				return;
-			}
-			cartCondition = data;
-			setCartCondition();
-		});
+	var xhr = new XMLHttpRequest();
+	xhr.open('POST', 'https://neto-api.herokuapp.com/cart');
+	xhr.send(removeItem );
+	xhr.addEventListener('load', updateCart);
+});
+
+function updateCart() {
+	if(event.currentTarget.error) {
+		console.log(event.currentTarget.message);
+	}
+	setCartCondition(event);	
 }

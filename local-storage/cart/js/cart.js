@@ -83,7 +83,7 @@ function setCartCondition() {
 			x += 'open';
 		}
 		x += `"><span><strong class="quick-cart-text">Оформить заказ<br></strong>
-                <span id="quick-cart-price">$${el.price}.00</span></span></a>`;
+				<span id="quick-cart-price">$${el.price}.00</span></span></a>`;
 	});
 	quickCart.innerHTML = x;
 }    
@@ -105,7 +105,6 @@ const orderData = new FormData(orderDataForm);
 const addToCartBtn = document.querySelector('#AddToCart');
 orderData.append('productId', orderDataForm.dataset.productId);
 addToCartBtn.addEventListener('click', () => { 
-	event.preventDefault();
 	var xhr = new XMLHttpRequest();
 	xhr.open('POST', 'https://neto-api.herokuapp.com/cart');
 	xhr.send(orderData);
@@ -113,9 +112,8 @@ addToCartBtn.addEventListener('click', () => {
 });
 
 const removeItem = new FormData();
-removeItem.append('productId', quickCart.productId);
+removeItem.append('productId', orderDataForm.dataset.productId);
 quickCart.addEventListener('click', () => { 
-	event.preventDefault();
 	var xhr = new XMLHttpRequest();
 	xhr.open('POST', 'https://neto-api.herokuapp.com/cart/remove');
 	xhr.send(removeItem );

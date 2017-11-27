@@ -23,17 +23,17 @@ function setColorAvailble() {
 	let x = '';
 	JSON.parse(colorAvailbleList.responseText).map((el) => {
 		x += `<div data-value="${el.type}" class="swatch-element color ${el.type}`;
-		if(el.isAvailable) {
+		if (el.isAvailable) {
 			x += ' available">';
 		} else {
 			x += ' soldout">';
 		}
 		x += `<div class="tooltip">${el.title}</div><input quickbeam="color" id="swatch-1-${el.type}"
             type="radio" name="color" value="${el.type}"`;
-		if(el.type == localStorage.choisedColor || el.type == 'blue') {
+		if (el.type == localStorage.choisedColor || el.type == 'blue') {
 			x += ' checked';
 		} 
-		if(!el.isAvailable) {
+		if (!el.isAvailable) {
 			x += ' disabled';
 		} 
 		x += `><label for="swatch-1-${el.type}" style="border-color: ${el.type};"><span style="background-color: ${el.code}
@@ -48,16 +48,16 @@ function setSizeAvailble() {
 	let x = '';
 	JSON.parse(sizeAvailbleList.responseText).map((el) => {
 		x += `<div data-value="${el.type}" class="swatch-element plain ${el.type} `;
-		if(el.isAvailable) {
+		if (el.isAvailable) {
 			x += 'available">';
 		} else {
 			x += 'soldout">';
 		}
 		x += `<input id="swatch-0-${el.type}" type="radio" name="size" value="${el.type}"`;
-		if(el.type == localStorage.choisedSize || el.type == 'm') {
+		if (el.type == localStorage.choisedSize || el.type == 'm') {
 			x += ' checked';
 		} 
-		if(!el.isAvailable) {
+		if (!el.isAvailable) {
 			x += ' disabled';
 		}
 		x += `><label for="swatch-0-${el.type}">${el.title} <img class="crossed-out"
@@ -65,6 +65,7 @@ function setSizeAvailble() {
 	});
 	sizeSwatch.innerHTML = x;
 }
+
 function setCartCondition() {
 	let x = '';
 	JSON.parse(cartCondition.responseText).map((el) => {
@@ -78,7 +79,7 @@ function setCartCondition() {
                     <span class="quick-cart-product-remove remove" data-id="${el.id}"></span>
              </div>
              <a id="quick-cart-pay" quickbeam="cart-pay" class="cart-ico`;
-		if(el.quantity != '0') {
+		if (el.quantity != '0') {
 			x += 'open';
 		}
 		x += `"><span><strong class="quick-cart-text">Оформить заказ<br></strong>
@@ -88,13 +89,13 @@ function setCartCondition() {
 }    
 
 colorSwatch.addEventListener('change', (event) => {
-	if(event.target.type == 'radio') {
+	if (event.target.type == 'radio') {
 		localStorage.choisedColor = event.target.value;
 	}
 });
 
 sizeSwatch.addEventListener('change', (event) => {
-	if(event.target.type == 'radio') {
+	if (event.target.type == 'radio') {
 		localStorage.choisedSize = event.target.value;
 	}
 });
@@ -122,7 +123,7 @@ quickCart.addEventListener('click', () => {
 });
 
 function updateCart() {
-	if(event.currentTarget.error) {
+	if (event.currentTarget.error) {
 		console.log(event.currentTarget.message);
 	}
 	setCartCondition(event);	

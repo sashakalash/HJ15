@@ -72,7 +72,7 @@ function setCartCondition() {
 		x += `<div class="quick-cart-product quick-cart-product-static" id="quick-cart-product-${el.id}" style="opacity: 1;">
                     <div class="quick-cart-product-wrap">
                         <img src="${el.pic}" title="${el.title}">
-                        <span class="s1" style="background-color: #000; opacity: .5">$800.00</span>
+                        <span class="s1" style="background-color: #000; opacity: .5">$${getTotalSum()}.00</span>
                         <span class="s2"></span>
                     </div>
                     <span class="count hide fadeUp" id="quick-cart-product-count-${el.id}">${el.quantity}</span>
@@ -84,6 +84,9 @@ function setCartCondition() {
 		}
 		x += `"><span><strong class="quick-cart-text">Оформить заказ<br></strong>
 				<span id="quick-cart-price">$${el.price}.00</span></span></a>`;
+		function getTotalSum() {
+			return el.price * el.quantity;
+		}
 	});
 	quickCart.innerHTML = x;
 }    
@@ -104,21 +107,20 @@ const orderDataForm = document.querySelector('#AddToCartForm');
 const orderData = new FormData(orderDataForm);
 const addToCartBtn = document.querySelector('#AddToCart');
 orderData.append('productId', orderDataForm.dataset.productId);
-addToCartBtn.addEventListener('click', () => { 
-	var xhr = new XMLHttpRequest();
-	xhr.open('POST', 'https://neto-api.herokuapp.com/cart');
+addToCartBtn.addEventListener('click', orderDataReq);
+quickCart.addEventListener('click', orderDataReq);
+function orderDataReq(event) {
+	const xhr = new XMLHttpRequest();
+	let url = '';
+	if(event.target.id == 'AddToCart' || event.target.parentElement.id == 'AddToCart') {
+		url = 'https://neto-api.herokuapp.com/cart';
+	} else {
+		url = 'https://neto-api.herokuapp.com/cart/remove';
+	}
+	xhr.open('POST', url);
 	xhr.send(orderData);
 	xhr.addEventListener('load', updateCart);
-});
-
-const removeItem = new FormData();
-removeItem.append('productId', orderDataForm.dataset.productId);
-quickCart.addEventListener('click', () => { 
-	var xhr = new XMLHttpRequest();
-	xhr.open('POST', 'https://neto-api.herokuapp.com/cart/remove');
-	xhr.send(removeItem );
-	xhr.addEventListener('load', updateCart);
-});
+}
 
 function updateCart() {
 	if (event.currentTarget.error) {

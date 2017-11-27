@@ -116,7 +116,7 @@ removeItem.append('productId', quickCart.productId);
 quickCart.addEventListener('click', () => { 
 	event.preventDefault();
 	var xhr = new XMLHttpRequest();
-	xhr.open('POST', 'https://neto-api.herokuapp.com/cart');
+	xhr.open('POST', 'https://neto-api.herokuapp.com/cart/remove');
 	xhr.send(removeItem );
 	xhr.addEventListener('load', updateCart);
 });

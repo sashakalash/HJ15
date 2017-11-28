@@ -69,7 +69,7 @@ function setSizeAvailble() {
 function setCartCondition() {
 	let x = '';
 	JSON.parse(cartCondition.responseText).map((el) => {
-		console.log(el)
+		console.log(el);
 		x += `<div class="quick-cart-product quick-cart-product-static" id="quick-cart-product-${el.id}" style="opacity: 1;">
                     <div class="quick-cart-product-wrap">
                         <img src="${el.pic}" title="${el.title}">
@@ -84,7 +84,10 @@ function setCartCondition() {
 			x += ' open';
 		}
 		x += `"><span><strong class="quick-cart-text">Оформить заказ<br></strong>
-				<span id="quick-cart-price">$${el.price}.00</span></span></a>`;
+				<span id="quick-cart-price">$${getTotalSum()}.00</span></span></a>`;
+		function getTotalSum() {
+			return el.price * el.quantity;
+		}
 	});
 	quickCart.innerHTML = x;
 }    
@@ -116,7 +119,7 @@ function orderDataReq(event) {
 	const xhr = new XMLHttpRequest();
 	xhr.addEventListener('load', updateCart);
 	if (event.target.classList.contains('remove')) {
-		console.log(event.target)
+		console.log(event.target);
 		xhr.open('POST', 'https://neto-api.herokuapp.com/cart/remove');
 		xhr.send(removeItemData);
 	} else {
@@ -129,6 +132,6 @@ function updateCart() {
 	if (event.currentTarget.error) {
 		console.log(event.currentTarget.message);
 	}
-	console.log(event)
+	console.log(event);
 	setCartCondition(event);	
 }

@@ -18,7 +18,6 @@ const colorSwatch = document.querySelector('#colorSwatch');
 const sizeSwatch = document.querySelector('#sizeSwatch');
 const quickCart = document.querySelector('#quick-cart');
 
-
 function setColorAvailble() {
 	let x = '';
 	JSON.parse(colorAvailbleList.responseText).map((el) => {
@@ -42,7 +41,6 @@ function setColorAvailble() {
 	});
 	colorSwatch.innerHTML = x;
 }
-
 
 function setSizeAvailble() {
 	let x = '';
@@ -69,7 +67,6 @@ function setSizeAvailble() {
 function setCartCondition() {
 	let x = '';
 	JSON.parse(cartCondition.responseText).map((el) => {
-		console.log(el);
 		x += `<div class="quick-cart-product quick-cart-product-static" id="quick-cart-product-${el.id}" style="opacity: 1;">
                     <div class="quick-cart-product-wrap">
                         <img src="${el.pic}" title="${el.title}">
@@ -119,11 +116,10 @@ function orderDataReq(event) {
 	const xhr = new XMLHttpRequest();
 	xhr.addEventListener('load', updateCart);
 	if (event.target.classList.contains('remove')) {
-		console.log(event.target);
 		xhr.open('POST', 'https://neto-api.herokuapp.com/cart/remove');
 		xhr.send(removeItemData);
+		location.reload();
 	} else {
-		console.log(event.target);
 		xhr.open('POST', 'https://neto-api.herokuapp.com/cart');
 		xhr.send(orderData);
 	}
@@ -133,6 +129,5 @@ function updateCart() {
 	if (event.currentTarget.error) {
 		console.log(event.currentTarget.message);
 	}
-	console.log(event);
 	setCartCondition(event);	
 }

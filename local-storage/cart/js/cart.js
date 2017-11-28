@@ -123,6 +123,7 @@ function orderDataReq(event) {
 		xhr.open('POST', 'https://neto-api.herokuapp.com/cart/remove');
 		xhr.send(removeItemData);
 	} else {
+		console.log(event.target);
 		xhr.open('POST', 'https://neto-api.herokuapp.com/cart');
 		xhr.send(orderData);
 	}

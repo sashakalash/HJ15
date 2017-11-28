@@ -81,7 +81,7 @@ function setCartCondition() {
              </div>
              <a id="quick-cart-pay" quickbeam="cart-pay" class="cart-ico`;
 		if (el.quantity != '0') {
-			x += 'open';
+			x += ' open';
 		}
 		x += `"><span><strong class="quick-cart-text">Оформить заказ<br></strong>
 				<span id="quick-cart-price">$${el.price}.00</span></span></a>`;
@@ -115,7 +115,7 @@ quickCart.addEventListener('click', orderDataReq);
 function orderDataReq(event) {
 	const xhr = new XMLHttpRequest();
 	xhr.addEventListener('load', updateCart);
-	if(event.target.classList.contains('remove')) {
+	if (event.target.classList.contains('remove')) {
 		console.log(event.target)
 		xhr.open('POST', 'https://neto-api.herokuapp.com/cart/remove');
 		xhr.send(removeItemData);
@@ -123,7 +123,6 @@ function orderDataReq(event) {
 		xhr.open('POST', 'https://neto-api.herokuapp.com/cart');
 		xhr.send(orderData);
 	}
-	
 }
 
 function updateCart() {

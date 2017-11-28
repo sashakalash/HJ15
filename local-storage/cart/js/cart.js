@@ -119,7 +119,7 @@ function orderDataReq(event) {
 		xhr.open('POST', 'https://neto-api.herokuapp.com/cart/remove');
 		xhr.send(removeItemData);
 		location.reload();
-	} else {
+	} else if (event.currentTarget.id == 'AddToCart') {
 		xhr.open('POST', 'https://neto-api.herokuapp.com/cart');
 		xhr.send(orderData);
 	}

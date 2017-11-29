@@ -30,7 +30,6 @@ function sendSingInRequest() {
 }
 
 function signUp() {
-	console.log('ok')
 	const answer = JSON.parse(signUpRequest.responseText);
 	if (answer.error) {
 		signUpMessage.textContent = answer.message;
@@ -40,8 +39,6 @@ function signUp() {
 }
 
 function signIn() {
-	console.log('ok')
-	
 	const answer = JSON.parse(signInRequest.responseText);
 	if (answer.error) {
 		signInMessage.textContent = answer.message;

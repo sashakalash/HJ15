@@ -15,7 +15,7 @@ const connectionChat = new WebSocket('wss://neto-api.herokuapp.com/chat');
 connectionChat.addEventListener('open', () => {
 	chatStatus.textContent = chatStatus.dataset.online;
 	sendMessBtn.disabled = false;
-	messagesContent.textContent = 'Пользователь появился в сети';
+	messagesContent.appendChild(messageStatus.cloneNode(true));
 });
 
 const messageAnotherUser = Array.from(document.querySelectorAll('.message'))
@@ -30,7 +30,8 @@ const messageAnotherUser = Array.from(document.querySelectorAll('.message'))
 connectionChat.addEventListener('message', (event) => {
 	if (event.data === '...') {
 		messagesContent.appendChild(messageLoading).cloneNode(true);
-	}
+    }
+    
 	const date = new Date();
 	messageAnotherUser.querySelector('.message-text').textContent = event.data;
 	messageAnotherUser.querySelector('.timestamp').textContent = date.getHours() + ':' + date.getMinutes();
@@ -54,7 +55,7 @@ newMessageForm.addEventListener('submit', (event) => {
 connectionChat.addEventListener('close', () => {
 	chatStatus.textContent = chatStatus.dataset.offline;
 	sendMessBtn.disabled = true;
-	messagesContent.textContent = 'Пользователь не в сети';
+	messagesContent.appendChild(messageStatus.cloneNode(true));
 });
 
 window.addEventListener('beforeunload', () => {

@@ -5,14 +5,11 @@ const inputMessForm = chat.querySelector('.message-input');
 const sendMessBtn = chat.querySelector('.message-submit');
 const messagesContent = chat.querySelector('.messages-content');
 const chatStatus = chat.querySelector('.chat-status');
+
 const messagesTemplates = chat.querySelector('.messages-templates');
-const messageLoading = messagesTemplates.querySelector('.message.loading');
-const messageWithClass = messagesTemplates.querySelector('.message.message-personal');
-const messageWOClass = messagesTemplates.querySelector('.message');
-const messageStatus = messagesTemplates.querySelector('.message.message-status');
-console.log(messageLoading, messageWithClass, messageWOClass, messageStatus);
-
-
+const messageLoading = messagesTemplates.querySelector('div.message loading');
+const messageUser= messagesTemplates.querySelector('.message-personal');
+const messageStatus = messagesTemplates.querySelector('.message-status');
 
 const connectionChat = new WebSocket('wss://neto-api.herokuapp.com/chat');
 connectionChat.addEventListener('open', () => {
@@ -21,18 +18,23 @@ connectionChat.addEventListener('open', () => {
 	messagesContent.textContent = 'Пользователь появился в сети';
 });
 
-console.log(messagesContent);
-connectionChat.addEventListener('message', (event) => {
-	if(event.data === '...') {
-        
-		messagesContent.innerHTML = messageLoading;
-	}
-	messageWithClass.querySelector('.message-text').textContent = event.data;
-	messageWithClass.querySelector('.timestamp').textContent = event.timeStamp;
-	console.log(messageWithClass);
+const messageAnotherUser = Array.from(document.querySelectorAll('.message'))
+	.find(el => {
+		if (!(el.classList.contains('loading') || 
+            el.classList.contains('message-personal') || 
+            el.classList.contains('message-status'))) {
+			return el.cloneNode(true);
+		}
+	});
 
-	messagesContent.innerHTML = messageWithClass;
-	console.log(messagesContent);
+connectionChat.addEventListener('message', (event) => {
+	if (event.data === '...') {
+		messagesContent.appendChild(messageLoading).cloneNode(true);
+    }
+    const date = new Date();
+	messageAnotherUser.querySelector('.message-text').textContent = event.data;
+	messageAnotherUser.querySelector('.timestamp').textContent = date.getHours() + ':' + date.getMinutes();
+	messagesContent.appendChild(messageAnotherUser.cloneNode(true));
 });
 
 connectionChat.addEventListener('error', (error) => {
@@ -42,12 +44,19 @@ connectionChat.addEventListener('error', (error) => {
 newMessageForm.addEventListener('submit', (event) => {
 	event.preventDefault();
 	connectionChat.send(inputMessForm.value);
-	messagesContent.textContent += inputMessForm.value;
-    
+	messageUser.querySelector('.message-text').textContent = event.data;
+    messageUser.querySelector('.timestamp').textContent = event.timeStamp;
+    console.log(messageUser)
+	messagesContent.appendChild(messageUser.cloneNode(true));
+	inputMessForm.value = '';
 });
 
 connectionChat.addEventListener('close', () => {
 	chatStatus.textContent = chatStatus.dataset.offline;
 	sendMessBtn.disabled = true;
 	messagesContent.textContent = 'Пользователь не в сети';
+});
+
+window.addEventListener('beforeunload', () => {
+	connectionChat.close(1000);
 });

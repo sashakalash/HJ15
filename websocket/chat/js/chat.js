@@ -30,8 +30,8 @@ const messageAnotherUser = Array.from(document.querySelectorAll('.message'))
 connectionChat.addEventListener('message', (event) => {
 	if (event.data === '...') {
 		messagesContent.appendChild(messageLoading).cloneNode(true);
-    }
-    const date = new Date();
+	}
+	const date = new Date();
 	messageAnotherUser.querySelector('.message-text').textContent = event.data;
 	messageAnotherUser.querySelector('.timestamp').textContent = date.getHours() + ':' + date.getMinutes();
 	messagesContent.appendChild(messageAnotherUser.cloneNode(true));
@@ -43,10 +43,10 @@ connectionChat.addEventListener('error', (error) => {
 
 newMessageForm.addEventListener('submit', (event) => {
 	event.preventDefault();
+	const date = new Date();
 	connectionChat.send(inputMessForm.value);
-	messageUser.querySelector('.message-text').textContent = event.data;
-    messageUser.querySelector('.timestamp').textContent = event.timeStamp;
-    console.log(messageUser)
+	messageUser.querySelector('.message-text').textContent = inputMessForm.value;
+	messageUser.querySelector('.timestamp').textContent = date.getHours() + ':' + date.getMinutes();
 	messagesContent.appendChild(messageUser.cloneNode(true));
 	inputMessForm.value = '';
 });

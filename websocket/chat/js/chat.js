@@ -15,7 +15,7 @@ const connectionChat = new WebSocket('wss://neto-api.herokuapp.com/chat');
 connectionChat.addEventListener('open', () => {
 	chatStatus.textContent = chatStatus.dataset.online;
 	sendMessBtn.disabled = false;
-	messagesContent.appendChild(messageStatus.cloneNode(true));
+	messagesContent.appendChild(messageStatus.cloneNode(true));	
 });
 
 const messageAnotherUser = Array.from(document.querySelectorAll('.message'))
@@ -26,12 +26,12 @@ const messageAnotherUser = Array.from(document.querySelectorAll('.message'))
 			return el.cloneNode(true);
 		}
 	});
-
+	
 connectionChat.addEventListener('message', (event) => {
+	messagesContent.textContent = '';
 	if (event.data === '...') {
 		messagesContent.appendChild(messageLoading).cloneNode(true);
-    }
-    
+	}
 	const date = new Date();
 	messageAnotherUser.querySelector('.message-text').textContent = event.data;
 	messageAnotherUser.querySelector('.timestamp').textContent = date.getHours() + ':' + date.getMinutes();

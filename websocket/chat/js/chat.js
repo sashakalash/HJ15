@@ -5,6 +5,7 @@ const inputMessForm = chat.querySelector('.message-input');
 const sendMessBtn = chat.querySelector('.message-submit');
 const messagesContent = chat.querySelector('.messages-content');
 const chatStatus = chat.querySelector('.chat-status');
+const messageStatusClone = messagesContent.querySelector('.message-status');
 
 const messagesTemplates = chat.querySelector('.messages-templates');
 const messageLoading = messagesTemplates.querySelector('div.message loading');
@@ -28,7 +29,7 @@ const messageAnotherUser = Array.from(document.querySelectorAll('.message'))
 	});
 	
 connectionChat.addEventListener('message', (event) => {
-	messagesContent.textContent = '';
+	messageStatusClone.setAttribute('style', 'display:none');
 	if (event.data === '...') {
 		messagesContent.appendChild(messageLoading).cloneNode(true);
 	}
@@ -55,7 +56,7 @@ newMessageForm.addEventListener('submit', (event) => {
 connectionChat.addEventListener('close', () => {
 	chatStatus.textContent = chatStatus.dataset.offline;
 	sendMessBtn.disabled = true;
-	messagesContent.appendChild(messageStatus.cloneNode(true));
+	messageStatusClone.removeAttribute('style');
 });
 
 window.addEventListener('beforeunload', () => {

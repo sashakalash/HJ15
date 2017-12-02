@@ -11,6 +11,8 @@ const messageLoading = messagesTemplates.querySelector('div.message loading');
 const messageUser= messagesTemplates.querySelector('.message-personal');
 const messageStatus = messagesTemplates.querySelector('.message-status');
 
+messagesContent.setAttribute('overflow-y', 'scroll');
+
 const connectionChat = new WebSocket('wss://neto-api.herokuapp.com/chat');
 connectionChat.addEventListener('open', () => {
 	chatStatus.textContent = chatStatus.dataset.online;
@@ -55,7 +57,7 @@ newMessageForm.addEventListener('submit', (event) => {
 connectionChat.addEventListener('close', () => {
 	chatStatus.textContent = chatStatus.dataset.offline;
 	sendMessBtn.disabled = true;
-	// messagesContent.querySelector('.message-status').removeAttribute('style');
+	messagesContent.querySelector('.message-status').removeAttribute('style');
 });
 
 window.addEventListener('beforeunload', () => {

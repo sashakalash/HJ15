@@ -11,13 +11,14 @@ const messageLoading = messagesTemplates.querySelector('div.message loading');
 const messageUser= messagesTemplates.querySelector('.message-personal');
 const messageStatus = messagesTemplates.querySelector('.message-status');
 
-messagesContent.setAttribute('overflow-y', 'scroll');
+messagesContent.setAttribute('style', 'overflow-y:scroll');
+messagesContent.appendChild(messageStatus.cloneNode(true));	
 
 const connectionChat = new WebSocket('wss://neto-api.herokuapp.com/chat');
 connectionChat.addEventListener('open', () => {
+	messagesContent.querySelector('.message-status').setAttribute('style', 'display:none');	
 	chatStatus.textContent = chatStatus.dataset.online;
 	sendMessBtn.disabled = false;
-	messagesContent.appendChild(messageStatus.cloneNode(true));	
 });
 
 const messageAnotherUser = Array.from(document.querySelectorAll('.message'))
@@ -30,7 +31,6 @@ const messageAnotherUser = Array.from(document.querySelectorAll('.message'))
 	});
 	
 connectionChat.addEventListener('message', (event) => {
-	messagesContent.querySelector('.message-status').setAttribute('style', 'display:none');
 	if (event.data === '...') {
 		messagesContent.appendChild(messageLoading).cloneNode(true);
 	}
@@ -41,7 +41,7 @@ connectionChat.addEventListener('message', (event) => {
 });
 
 connectionChat.addEventListener('error', (error) => {
-	messagesContent.textContent = error.data;
+	console.log(new Error(error));
 });
 
 newMessageForm.addEventListener('submit', (event) => {

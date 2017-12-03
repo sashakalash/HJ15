@@ -12,11 +12,17 @@ const messageUser= messagesTemplates.querySelector('.message-personal');
 const messageStatus = messagesTemplates.querySelector('.message-status');
 
 messagesContent.setAttribute('style', 'overflow-y:scroll');
-messagesContent.appendChild(messageStatus.cloneNode(true));	
+
+if (!messagesContent.querySelector('.message-status')) {
+	messagesContent.appendChild(messageStatus.cloneNode(true));		
+}
+
+const messageStatusToRemove = messagesContent.querySelector('.message-status');
+
 
 const connectionChat = new WebSocket('wss://neto-api.herokuapp.com/chat');
 connectionChat.addEventListener('open', () => {
-	messagesContent.querySelector('.message-status').setAttribute('style', 'display:none');	
+	messageStatusToRemove.parentElement.removeChild(messageStatusToRemove);
 	chatStatus.textContent = chatStatus.dataset.online;
 	sendMessBtn.disabled = false;
 });
@@ -57,7 +63,7 @@ newMessageForm.addEventListener('submit', (event) => {
 connectionChat.addEventListener('close', () => {
 	chatStatus.textContent = chatStatus.dataset.offline;
 	sendMessBtn.disabled = true;
-	messagesContent.querySelector('.message-status').removeAttribute('style');
+	messagesContent.appendChild(messageStatus.cloneNode(true));	
 });
 
 window.addEventListener('beforeunload', () => {

@@ -2,7 +2,7 @@
 const profile = document.querySelector('.container');
 
 function getElement(datasetName) {
-	Array.from(profile.querySelectorAll('*')).find(el => {
+	return Array.from(profile.querySelectorAll('*')).find(el => {
 		if (el.hasAttribute(datasetName)) {
 			return el;
 		}
@@ -10,7 +10,7 @@ function getElement(datasetName) {
 }
 
 const profileWallpaper = getElement('data-wallpaper');
-const profileUsername = getElement('data-username');
+const profileUserName = getElement('data-username');
 const profileDesc = getElement('data-description');
 const profilePic = getElement('data-pic');
 const profileTweets = getElement('data-tweets');
@@ -18,7 +18,7 @@ const profileFollowers = getElement('data-followers');
 const profileFollowing = getElement('data-following');
 
 function parseProfile(profileInfo) {
-	profileUsername.textContent = profileInfo.username;
+	profileUserName.textContent = profileInfo.username;
 	profileDesc.textContent = profileInfo.descrition;
 	profileTweets.textContent = profileInfo.tweets;
 	profileFollowers.textContent = profileInfo.followers;
@@ -39,5 +39,8 @@ function loadData(url) {
 }
 
 loadData('https://neto-api.herokuapp.com/twitter/jsonp')
-    .then(data => parseProfile(data));
-    .then(body.querySelector('#loadDataScript').parentElement.removeChild('#loadDataScript'))
+	.then(data => parseProfile(data))
+	.then(() => {
+		const scriptToRemove = document.querySelector('#loadDataScript');
+		scriptToRemove.parentElement.removeChild(scriptToRemove);
+	});

@@ -29,20 +29,15 @@ function parseProfile(profileInfo) {
 
 function loadData(url) {
 	const functionName = 'cb' + Math.ceil(Math.random() * 100000);
-    console.log(functionName)
 	return new Promise((done, fail) => {
-        console.log(done)
 		window[functionName] = done;
-		const script = document.scripts[0].cloneNode();
-        script.src = `${url}?jsonp=${functionName}`;
-        console.log(script.src)
+		const script = document.createElement('script');
+		script.src = `${url}?jsonp=${functionName}`;
+		script.id = 'loadDataScript';
 		document.body.appendChild(script);
 	}); 
 }
 
 loadData('https://neto-api.herokuapp.com/twitter/jsonp')
-	.then(data => {
-        console.log(data);
-        parseProfile(data)
-    }
-    );
+    .then(data => parseProfile(data));
+    .then(body.querySelector('#loadDataScript').parentElement.removeChild('#loadDataScript'))

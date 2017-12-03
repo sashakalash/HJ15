@@ -41,7 +41,7 @@ connectionChat.addEventListener('message', (event) => {
 });
 
 connectionChat.addEventListener('error', (error) => {
-	console.log(new Error(error));
+	console.log(error);
 });
 
 newMessageForm.addEventListener('submit', (event) => {

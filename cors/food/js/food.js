@@ -37,9 +37,9 @@ Promise.all(urls.map(loadData))
 	.then(res => {
 		title.textContent = res[0].title;
 		ingredients.textContent = res[0].ingredients.join(', ');
-		pic.setAttribute('background-image', res[0].pic);
-        rating.textContent = (res[1].rating * 100) / 100;
-		star.setAttribute('width', `(${(res[1].rating * 10) * 100 / 100}%`);
+		pic.style.backgroundImage = `url("${res[0].pic}")`;
+		rating.textContent = (res[1].rating * 100) / 100;
+		star.style.width = `${(res[1].rating * 10) * 100 / 100}%`;
 		votes.textContent = `(${res[1].votes} оценок)`;
 		res[2].consumers.forEach(el => {
 			let consumer = document.createElement('img');
@@ -52,6 +52,8 @@ Promise.all(urls.map(loadData))
 		consumers.appendChild(total);
 	})
 	.then(() => {
-		const scriptToRemove = document.querySelector('#loadDataScript');
-		scriptToRemove.parentElement.removeChild(scriptToRemove);
+		const allScriptToRemove = document.querySelectorAll('#loadDataScript');
+		for (const script of allScriptToRemove) {
+			script.parentElement.removeChild(script);
+		}
 	});

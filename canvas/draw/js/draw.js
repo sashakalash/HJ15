@@ -27,10 +27,10 @@ function circle(point) {
 }
 
 function smoothCurveBetween (p1, p2) {
-  const cp = p1.map((coord, idx) => (coord + p2[idx]) / 2);
-  ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;  
-  ctx.quadraticCurveTo(...p1, ...cp);
-  if (hue != 0 || hue != 359) {
+	const cp = p1.map((coord, idx) => (coord + p2[idx]) / 2);
+	ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;  
+	ctx.quadraticCurveTo(...p1, ...cp);
+	if (hue != 0 || hue != 359) {
 		weird? hue--: hue++;
 	}
 }
@@ -44,13 +44,6 @@ function smoothCurve(points) {
 	for(let i = 1; i < points.length - 1; i++) {
 		smoothCurveBetween(points[i], points[i + 1]);
 	}
-	if (brushRadius == 5 || brushRadius == 100) {
-		referenceDirection = !referenceDirection;
-	}
-	referenceDirection? brushRadius++: brushRadius--;  
-	if (hue != 0 || hue != 359) {
-		weird? hue--: hue++;
-	}
 	ctx.stroke();
 }
 
@@ -58,6 +51,15 @@ function makePoint(x, y, reflect = false) {
 	return  reflect ? [y, x] : [x, y];
 }
 
+function changeColorAndHue() {
+	if (brushRadius == 5 || brushRadius == 100) {
+		referenceDirection = !referenceDirection;
+	}
+	referenceDirection? brushRadius++: brushRadius--;  
+	if (hue != 0 || hue != 359) {
+		weird? hue--: hue++;
+	}
+}
 canvas.addEventListener('dblclick', () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	curves = [];
@@ -76,6 +78,7 @@ canvas.addEventListener('mousedown', (evt) => {
 
 canvas.addEventListener('mouseup', () => {
 	drawing = false;
+	changeColorAndHue();
 });
 
 canvas.addEventListener('mouseleave', () => {

@@ -6,6 +6,9 @@ canvas.height = window.innerHeight;
 
 window.addEventListener('resize', () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	curves = [];
+	undone = [];
+	needsRepaint = true;
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight; 
 });
@@ -26,7 +29,7 @@ function circle(point) {
 	ctx.fill();
 }
 
-function smoothCurveBetween (p1, p2) {
+function smoothCurveBetween (p1, p2) {	
 	const cp = p1.map((coord, idx) => (coord + p2[idx]) / 2);
 	ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;  
 	ctx.quadraticCurveTo(...p1, ...cp);
@@ -64,7 +67,7 @@ canvas.addEventListener('dblclick', () => {
 	needsRepaint = true;
 });
 
-canvas.addEventListener('mousedown', (evt) => {
+canvas.addEventListener('mousedown', (evt) => {	
 	drawing = true;
 	weird = evt.shiftKey; 
 	const curve = []; 
@@ -75,6 +78,7 @@ canvas.addEventListener('mousedown', (evt) => {
 
 canvas.addEventListener('mouseup', () => {
 	drawing = false;
+	
 });
 
 canvas.addEventListener('mouseleave', () => {
@@ -99,12 +103,15 @@ function repaint () {
 }
 
 function tick () {
+	ctx.save();
 	if(needsRepaint) {
 		repaint();
 		needsRepaint = false;
 	}
-	window.requestAnimationFrame(tick);
+	ctx.restore();
+	changeColorAndHue();
 	
+	window.requestAnimationFrame(tick);
 }
 
 tick();

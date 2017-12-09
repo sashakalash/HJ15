@@ -25,7 +25,7 @@ let referenceDirection = true;
 function circle(point) {
 	ctx.beginPath();
 	ctx.arc(...point, brushRadius / 2, 0, 2 * Math.PI);
-	ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
+	ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
 	ctx.fill();
 }
 

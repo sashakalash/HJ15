@@ -18,28 +18,25 @@ let hue = 0;
 let curves = [];
 let undone = [];
 let drawing = false;
-let weird = false;
+let isShift = false;
 let needsRepaint = false;
 let referenceDirection = true;
 
 function circle(point) {
 	ctx.beginPath();
-	ctx.save();	
 	ctx.arc(...point, brushRadius / 2, 0, 2 * Math.PI);
 	ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
 	ctx.fill();
-	ctx.restore();
 }
 
 function smoothCurveBetween (p1, p2) {	
 	const cp = p1.map((coord, idx) => (coord + p2[idx]) / 2);
-	ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;  
+	ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
 	ctx.quadraticCurveTo(...p1, ...cp);
 }
 
 function smoothCurve(points) {
 	ctx.beginPath();
-	ctx.save();	
 	ctx.lineWidth = brushRadius;
 	ctx.lineJoin = 'round';
 	ctx.lineCap = 'round';
@@ -47,9 +44,7 @@ function smoothCurve(points) {
 	for(let i = 1; i < points.length - 1; i++) {
 		smoothCurveBetween(points[i], points[i + 1]);
 	}
-	ctx.stroke();
-	ctx.restore();
-	
+	ctx.stroke();	
 }
 
 function makePoint(x, y, reflect = false) {
@@ -61,8 +56,8 @@ function changeColorAndHue() {
 		referenceDirection = !referenceDirection;
 	}
 	referenceDirection? brushRadius++: brushRadius--;  
-	if (hue != 0 || hue != 359) {
-		weird? hue--: hue++;
+	if (hue >= 0 && hue <= 359) {
+		isShift? hue--: hue++;
 	}
 }
 canvas.addEventListener('dblclick', () => {
@@ -74,16 +69,15 @@ canvas.addEventListener('dblclick', () => {
 
 canvas.addEventListener('mousedown', (evt) => {	
 	drawing = true;
-	weird = evt.shiftKey; 
+	isShift = evt.shiftKey; 
 	const curve = []; 
-	curve.push(makePoint(evt.offsetX, evt.offsetY, weird));
+	curve.push([evt.offsetX, evt.offsetY]);
 	curves.push(curve); 
 	needsRepaint = true;
 });
 
 canvas.addEventListener('mouseup', () => {
-	drawing = false;
-	
+	drawing = false;	
 });
 
 canvas.addEventListener('mouseleave', () => {
@@ -92,7 +86,7 @@ canvas.addEventListener('mouseleave', () => {
 
 canvas.addEventListener('mousemove', (evt) => {
 	if (drawing) {
-		const point = makePoint(evt.offsetX, evt.offsetY, weird);
+		const point = [evt.offsetX, evt.offsetY];
 		curves[curves.length - 1].push(point);
 		needsRepaint = true;
 	}
@@ -111,25 +105,10 @@ function tick () {
 	if(needsRepaint) {
 		repaint();
 		needsRepaint = false;
+		changeColorAndHue();	
+		
 	}	
-	ctx.restore();
-	changeColorAndHue();
-	
-	window.requestAnimationFrame(tick);
+	window.requestAnimationFrame(tick);	
 }
 
 tick();
-
-
-
-// Характеристики линии
-// Цвет линии задается с помощью цветовой модели HSL. Насыщенность 100%, светлота 50%.
-
-// Оттенок меняется при каждом тике на единицу в диапазоне от 0 до 359 включительно.
-//  При этом если нажата клавиша Shift, то он уменьшается, иначе увеличивается. 
-//  Если оттенок достиг максимума или минимума, то значение устанавливается в минимум или максимум соответственно.
-
-// Толщина линии меняется при каждом тике на единицу в диапазоне от 5 до 100 включительно. 
-// Начинать нужно со 100. При достижении максимума толщина должна уменьшаться. При достижении минимума увеличиваться.
-
-// Необходимо скруглить края линии задав свойствам контекста lineJoin и lineCap значение round.

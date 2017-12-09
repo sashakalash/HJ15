@@ -30,9 +30,6 @@ function smoothCurveBetween (p1, p2) {
 	const cp = p1.map((coord, idx) => (coord + p2[idx]) / 2);
 	ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;  
 	ctx.quadraticCurveTo(...p1, ...cp);
-	if (hue != 0 || hue != 359) {
-		weird? hue--: hue++;
-	}
 }
 
 function smoothCurve(points) {
@@ -78,7 +75,6 @@ canvas.addEventListener('mousedown', (evt) => {
 
 canvas.addEventListener('mouseup', () => {
 	drawing = false;
-	changeColorAndHue();
 });
 
 canvas.addEventListener('mouseleave', () => {
@@ -108,6 +104,7 @@ function tick () {
 		needsRepaint = false;
 	}
 	window.requestAnimationFrame(tick);
+	
 }
 
 tick();

@@ -58,10 +58,10 @@ function changeColorAndHue() {
 	}
 	referenceDirection? brushRadius++: brushRadius--;  
 
-	if (hue >= 0 && hue <= 359) {
+	if (hue > -1 && hue < 360) {
 		isShift? hue--: hue++;
 	} else {
-		hue < 0? hue = 0: hue = 359;
+		hue == -1? hue = 0: hue = 359;
 	}
 }
 canvas.addEventListener('dblclick', () => {

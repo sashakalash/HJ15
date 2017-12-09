@@ -24,9 +24,11 @@ let referenceDirection = true;
 
 function circle(point) {
 	ctx.beginPath();
+	ctx.save();	
 	ctx.arc(...point, brushRadius / 2, 0, 2 * Math.PI);
 	ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
 	ctx.fill();
+	ctx.restore();
 }
 
 function smoothCurveBetween (p1, p2) {	
@@ -37,6 +39,7 @@ function smoothCurveBetween (p1, p2) {
 
 function smoothCurve(points) {
 	ctx.beginPath();
+	ctx.save();	
 	ctx.lineWidth = brushRadius;
 	ctx.lineJoin = 'round';
 	ctx.lineCap = 'round';
@@ -45,6 +48,8 @@ function smoothCurve(points) {
 		smoothCurveBetween(points[i], points[i + 1]);
 	}
 	ctx.stroke();
+	ctx.restore();
+	
 }
 
 function makePoint(x, y, reflect = false) {
@@ -103,11 +108,10 @@ function repaint () {
 }
 
 function tick () {
-	ctx.save();
 	if(needsRepaint) {
 		repaint();
 		needsRepaint = false;
-	}
+	}	
 	ctx.restore();
 	changeColorAndHue();
 	

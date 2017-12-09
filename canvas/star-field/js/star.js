@@ -22,7 +22,7 @@ function getStar() {
         ctx.beginPath();
         ctx.fillStyle = starColors[Math.round(getRand(0, 2))];
         ctx.globalAlpha = starBrightness;
-        ctx.arc(x, y, starSize, 0, 2 * PI);
+        ctx.arc(x, y, starSize / 2, 0, 2 * PI);
         ctx.fill();
         ctx.closePath();        
     }   

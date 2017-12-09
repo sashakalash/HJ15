@@ -14,7 +14,7 @@ window.addEventListener('resize', () => {
 });
    
 let brushRadius = 100;
-let hue = 0;
+let hue = 1;
 let curves = [];
 let undone = [];
 let drawing = false;
@@ -36,6 +36,7 @@ function smoothCurveBetween (p1, p2) {
 }
 
 function smoothCurve(points) {
+	console.log(hue)
 	ctx.beginPath();
 	ctx.lineWidth = brushRadius;
 	ctx.lineJoin = 'round';
@@ -56,8 +57,11 @@ function changeColorAndHue() {
 		referenceDirection = !referenceDirection;
 	}
 	referenceDirection? brushRadius++: brushRadius--;  
+
 	if (hue >= 0 && hue <= 359) {
 		isShift? hue--: hue++;
+	} else {
+		hue < 0? hue = 0: hue = 359;
 	}
 }
 canvas.addEventListener('dblclick', () => {

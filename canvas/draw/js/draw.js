@@ -7,7 +7,6 @@ canvas.height = window.innerHeight;
 window.addEventListener('resize', () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	curves = [];
-	undone = [];
 	needsRepaint = true;
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight; 
@@ -16,7 +15,6 @@ window.addEventListener('resize', () => {
 let brushRadius = 100;
 let hue = 1;
 let curves = [];
-let undone = [];
 let drawing = false;
 let isShift = false;
 let needsRepaint = false;
@@ -24,32 +22,32 @@ let referenceDirection = true;
 
 function circle(point) {
 	ctx.beginPath();
-	ctx.arc(...point, brushRadius / 2, 0, 2 * Math.PI);
-	ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
+	ctx.arc(point[0], point[1], point[2] / 2, 0, 2 * Math.PI);
+	ctx.fillStyle = `hsl(${point[3]}, 100%, 50%)`;
 	ctx.fill();
 }
 
 function smoothCurveBetween (p1, p2) {	
-	const cp = p1.map((coord, idx) => (coord + p2[idx]) / 2);
-	ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
-	ctx.quadraticCurveTo(...p1, ...cp);
+	const cp = p1.map((coord, idx) => {
+		for (let i = 0; i < 2; i++) {
+			return (coord + p2[idx]) / 2;
+		}
+	});
+	ctx.strokeStyle = `hsl(${p1[3]}, 100%, 50%)`;
+	ctx.quadraticCurveTo(p1[0], p1[1], cp[0], cp[1]);
 }
 
 function smoothCurve(points) {
-	console.log(hue)
+	let currentPoint = points[0];
 	ctx.beginPath();
-	ctx.lineWidth = brushRadius;
+	ctx.lineWidth = currentPoint[2];
 	ctx.lineJoin = 'round';
 	ctx.lineCap = 'round';
-	ctx.moveTo(...points[0]);
+	ctx.moveTo(currentPoint[0], currentPoint[1]);
 	for(let i = 1; i < points.length - 1; i++) {
 		smoothCurveBetween(points[i], points[i + 1]);
 	}
-	ctx.stroke();	
-}
-
-function makePoint(x, y, reflect = false) {
-	return  reflect ? [y, x] : [x, y];
+	ctx.stroke();
 }
 
 function changeColorAndHue() {
@@ -67,7 +65,6 @@ function changeColorAndHue() {
 canvas.addEventListener('dblclick', () => {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	curves = [];
-	undone = [];
 	needsRepaint = true;
 });
 
@@ -75,7 +72,7 @@ canvas.addEventListener('mousedown', (evt) => {
 	drawing = true;
 	isShift = evt.shiftKey; 
 	const curve = []; 
-	curve.push([evt.offsetX, evt.offsetY]);
+	curve.push([evt.offsetX, evt.offsetY, brushRadius, hue]);
 	curves.push(curve); 
 	needsRepaint = true;
 });
@@ -90,7 +87,7 @@ canvas.addEventListener('mouseleave', () => {
 
 canvas.addEventListener('mousemove', (evt) => {
 	if (drawing) {
-		const point = [evt.offsetX, evt.offsetY];
+		const point = [evt.offsetX, evt.offsetY, brushRadius, hue];
 		curves[curves.length - 1].push(point);
 		needsRepaint = true;
 	}

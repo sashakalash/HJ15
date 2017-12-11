@@ -1,115 +1,80 @@
-'use strict';
-const canvas = document.querySelector('canvas');
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+let canvasBody = document.getElementById('draw'),
+	canvas = canvasBody.getContext('2d'),
 
-window.addEventListener('resize', () => {
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	curves = [];
-	needsRepaint = true;
-	canvas.width = window.innerWidth;
-	canvas.height = window.innerHeight; 
+	w = canvasBody.width = window.innerWidth,
+	h = canvasBody.height = window.innerHeight,
+	color = 'hsl(hue,100%,50%)', 
+	tick = 0,
+	newTick = tick + 1,
+	currentHue = 0, 
+	painting = false;
+    lastX = 0, 
+    lastY = 0,
+    direction = true,
+    canvas.lineWidth = 100;
+
+canvas.lineJoin = 'round';
+canvas.lineCap = 'round';
+
+canvasBody.onmousedown = function() {
+	painting = true;
+};
+
+canvasBody.onmouseup = function() {
+	painting = false;
+};
+
+canvasBody.addEventListener('mousedown', (evt) => {
+	const posX = evt.pageX,
+		posY = evt.pageY;
+	[lastX, lastY] = [posX, posY];
 });
-   
-let brushRadius = 100;
-let hue = 1;
-let curves = [];
-let drawing = false;
-let isShift = false;
-let needsRepaint = false;
-let referenceDirection = true;
 
-function circle(point) {
-	ctx.beginPath();
-	ctx.arc(point[0], point[1], point[2] / 2, 0, 2 * Math.PI);
-	ctx.fillStyle = `hsl(${point[3]}, 100%, 50%)`;
-	ctx.fill();
-}
+canvasBody.addEventListener('mouseleave', (evt) => {
+	painting = false;
+});
 
-function smoothCurveBetween (p1, p2) {	
-	const cp = p1.map((coord, idx) => {
-		for (let i = 0; i < 2; i++) {
-			return (coord + p2[idx]) / 2;
+canvasBody.addEventListener('dblclick',  function() {
+	canvas.clearRect(0, 0, w, h);
+});
+
+canvasBody.addEventListener('mousemove', function(e){
+	const posX = e.pageX,
+		posY = e.pageY;
+  	if (painting){
+		++tick;
+    	if (newTick){
+			if (currentHue !== 356){
+				if (!(e.shiftKey)) {
+					currentHue++; 
+				} else {
+					currentHue--;
+				}
+			} else {
+				currentHue = 0;
+			}
+			if(canvas.lineWidth >= 100 || canvas.lineWidth <= 5) {
+				direction = !direction;
+			}
+			if (direction) {
+				canvas.lineWidth++;
+			} else {
+				canvas.lineWidth--;
+			}
 		}
-	});
-	ctx.strokeStyle = `hsl(${p1[3]}, 100%, 50%)`;
-	ctx.quadraticCurveTo(p1[0], p1[1], cp[0], cp[1]);
-}
 
-function smoothCurve(points) {
-	let currentPoint = points[0];
-	ctx.beginPath();
-	ctx.lineWidth = currentPoint[2];
-	ctx.lineJoin = 'round';
-	ctx.lineCap = 'round';
-	ctx.moveTo(currentPoint[0], currentPoint[1]);
-	for(let i = 1; i < points.length - 1; i++) {
-		smoothCurveBetween(points[i], points[i + 1]);
+        currentColor = color.replace('hue', currentHue);
+		canvas.strokeStyle  = currentColor;
+		canvas.beginPath();
+		canvas.moveTo(lastX, lastY); 
+		canvas.lineTo(posX, posY);
+		canvas.stroke();
+		[lastX, lastY] = [posX, posY];
 	}
-	ctx.stroke();
-}
 
-function changeColorAndHue() {
-	if (brushRadius == 5 || brushRadius == 100) {
-		referenceDirection = !referenceDirection;
-	}
-	referenceDirection? brushRadius++: brushRadius--;  
-
-	if (hue > -1 && hue < 360) {
-		isShift? hue--: hue++;
-	} else {
-		hue == -1? hue = 0: hue = 359;
-	}
-}
-canvas.addEventListener('dblclick', () => {
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	curves = [];
-	needsRepaint = true;
 });
 
-canvas.addEventListener('mousedown', (evt) => {	
-	drawing = true;
-	isShift = evt.shiftKey; 
-	const curve = []; 
-	curve.push([evt.offsetX, evt.offsetY, brushRadius, hue]);
-	curves.push(curve); 
-	needsRepaint = true;
+window.addEventListener('resize', function(){
+	w = canvasBody.width = window.innerWidth;
+	h = canvasBody.height = window.innerHeight;
 });
-
-canvas.addEventListener('mouseup', () => {
-	drawing = false;	
-});
-
-canvas.addEventListener('mouseleave', () => {
-	drawing = false;
-});
-
-canvas.addEventListener('mousemove', (evt) => {
-	if (drawing) {
-		const point = [evt.offsetX, evt.offsetY, brushRadius, hue];
-		curves[curves.length - 1].push(point);
-		needsRepaint = true;
-	}
-});
-
-function repaint () {
-	ctx.clearRect(0, 0, canvas.width, canvas.height);
-	curves
-		.forEach((curve) => {
-			circle(curve[0]);
-			smoothCurve(curve);
-		});
-}
-
-function tick () {
-	if(needsRepaint) {
-		repaint();
-		needsRepaint = false;
-		changeColorAndHue();	
-		
-	}	
-	window.requestAnimationFrame(tick);	
-}
-
-tick();

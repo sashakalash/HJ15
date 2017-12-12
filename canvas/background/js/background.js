@@ -3,25 +3,78 @@ const canvas = document.querySelector('canvas');
 const ctx = canvas.getContext('2d');
 const PI = Math.PI;
 
+const starsSum = Math.round(getRand(50, 200));
+
 function getRand(min, max) {
 	return Math.random() * (max - min) + min;
 }
 
-function getStar() {
-	const starsSum = Math.round(getRand(50, 200));
+var firstTime = true;
+
+function nextPoint(x, y, time) {
+	console.log(x);
+	return {
+	  x: x + Math.sin((50 + x + (time / 10)) / 100) * 3,
+	  y: y + Math.sin((45 + x + (time / 10)) / 100) * 4
+	};
+  }
+
+var getStar = function() {
+	
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	let isCircle = true;
+	
+
 	for (let i = 0; i <= starsSum; i++) {
-		const starSize = getRand(0, 1.1);
-		const x = Math.round(getRand(0, canvas.width));
-		const y = Math.round(getRand(0, canvas.height));        
+		if (firstTime) {
+			var x = Math.round(getRand(0, canvas.width));
+			var y = Math.round(getRand(0, canvas.height)); 	
+			
+			// var curX = x;
+			// var curY = y;
+			
+			console.log(x, y, 'in if')
+		}
+			
+					
+		const size = getRand(0.1, 0.6);
+		const angle = getRand(0, 360);
+	 
 		ctx.beginPath();
+		if (isCircle) {
+			ctx.arc(x, y, 12 * size / 2, 0, 2 * PI);
+			isCircle = false;
+		} else {
+			ctx.moveTo(x, y);
+			ctx.lineTo(x + 20 * size, y);
+			ctx.moveTo(x + 10 * size, y - 10 * size);
+			ctx.lineTo(x + 10 * size, y + 10 * size);
+			ctx.rotate(PI / angle);
+			isCircle = true;	
+		}
 		ctx.strokeStyle = 'white';
-		ctx.arc(x, y, starSize / 2, 0, 2 * PI);
+		ctx.lineWidth = 5 * size;
 		ctx.stroke();
-		ctx.closePath();        
-	}   
-}
+		ctx.closePath();   
+	}
+	firstTime  = false;
+	console.log(x, 'after for');
+
+	x = nextPoint(x, y, Date.now()).x;
+	y = nextPoint(x, y, Date.now()).y;  
+
+	console.log(x, typeof x, y, 'new x & y')
+	
+	// requestAnimationFrame(getStar);
+	
+};
 
 getStar();
+
+getStar();
+
+
+
 // При этом вычислять текущее положение каждого объекта необходимо от его изначального положения. 
 // А не от измененного в предыдущий тик. Так как формула расчета положения задаёт колебания вокруг 
 // базовой точки, координаты которой будут первично сгенерированы при создании объекта.

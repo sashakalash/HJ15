@@ -2,60 +2,52 @@
 
 function showComments(list) {
 	const commentsContainer = document.querySelector('.comments');
-	const comments = list.map(el => commentsContainer.appendChild(createComment(el)));
+	const commentNode = list.map(createComment);
+	const comments = commentNode.reduce((comment, currentValue) => {
+		comment.appendChild(currentValue);
+		return comment;
+	}, document.createDocumentFragment());
+	commentsContainer.appendChild(comments);
+}
+
+
+function createEl(tagName, nameString = '') {
+	const el = document.createElement(tagName);
+	el.className = nameString;
+	return el;
 }
 
 function createComment(comment) {
-	const commentWrap = document.createElement('div');
-	commentWrap.className = 'comment-wrap';
-
-	const photo = document.createElement('div');
-	photo.className = 'photo';
+	console.log(comment.text)
+	const commentWrap = createEl('div', 'comment-wrap');
+	const photo = createEl('div', 'photo');
 	photo.setAttribute('title', comment.author.name);
-
-	const avatar = document.createElement('div');
-	avatar.className = 'avatar';
+	const avatar = createEl('div', 'avatar');
 	avatar.style.backgroundImage = `url("${comment.author.pic}")`;
-
-	const commentBlock = document.createElement('div');
-	commentBlock.className = 'comment-block';
-
-	const commentText = document.createElement('p');
-	commentText.className = 'comment-text';
+	const commentBlock = createEl('div', 'comment-block');
+	const commentText = createEl('p', 'comment-text');
+	commentText.style = 'white-space:pre';
 	commentText.textContent = `${comment.text.split('\n').join('<br>')}`;
-
-	const bottomComment = document.createElement('div');
-	bottomComment.className = 'bottom-comment';
-
-	const commentDate = document.createElement('div');
-	commentDate.className = 'comment-date';
+	const bottomComment = createEl('div', 'bottom-comment');
+	const commentDate = createEl('div', 'comment-date');
 	commentDate.textContent = `${new Date(comment.date).toLocaleString('ru-Ru')}`;
-
-	const commentActions = document.createElement('ul');
-	commentActions.className = 'comment-actions';
-
-	const complain = document.createElement ('li');
-	complain.className = 'complain';
+	const commentActions = createEl('ul', 'comment-actions');
+	const complain = createEl('li', 'complain');
 	complain.textContent = 'Пожаловаться';
-	const reply = document.createElement ('li');
-	reply.className = 'reply';
+	const reply = createEl('li', 'reply');
 	reply.textContent = 'Ответить';
 
 	photo.appendChild(avatar);
-
 	commentActions.appendChild(complain);
 	commentActions.appendChild(reply);
-
 	bottomComment.appendChild(commentDate);
 	bottomComment.appendChild(commentActions);
-
 	commentBlock.appendChild(commentText);
 	commentBlock.appendChild(bottomComment);
-
 	commentWrap.appendChild(photo);
 	commentWrap.appendChild(commentBlock);
-	return commentWrap;
 
+	return commentWrap;
 }
 
 fetch('https://neto-api.herokuapp.com/comments')

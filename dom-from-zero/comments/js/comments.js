@@ -18,7 +18,6 @@ function createEl(tagName, nameString = '') {
 }
 
 function createComment(comment) {
-	console.log(comment.text)
 	const commentWrap = createEl('div', 'comment-wrap');
 	const photo = createEl('div', 'photo');
 	photo.setAttribute('title', comment.author.name);
@@ -27,7 +26,7 @@ function createComment(comment) {
 	const commentBlock = createEl('div', 'comment-block');
 	const commentText = createEl('p', 'comment-text');
 	commentText.style = 'white-space:pre';
-	commentText.textContent = `${comment.text.split('\n').join('<br>')}`;
+	commentText.textContent = comment.text;
 	const bottomComment = createEl('div', 'bottom-comment');
 	const commentDate = createEl('div', 'comment-date');
 	commentDate.textContent = `${new Date(comment.date).toLocaleString('ru-Ru')}`;

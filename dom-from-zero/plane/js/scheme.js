@@ -15,8 +15,8 @@ const seatMapTitle = document.querySelector('#seatMapTitle');
 function showScheeme(event) {
 	event.preventDefault(); 
 	fetch(`https://neto-api.herokuapp.com/plane/${selectPlane.value}`)
-	    .then(res => res.json())
-	    .then(getScheme);
+		.then(res => res.json())
+		.then(getScheme);
 }
 
 function getScheme(response) {
@@ -25,7 +25,6 @@ function getScheme(response) {
 	seatMapTitle.textContent = `${response.title} (${response.passengers} пассажиров)`;
 	parseScheme(response);
 }
-
 
 function createRowEl(tagName, classObj, seatLetter) {
 	const element = document.createElement(tagName);
@@ -38,16 +37,15 @@ function createRowEl(tagName, classObj, seatLetter) {
 	return element;
 } 
 
-
-
-
 function createRow(rowNumber) {
 	const row = createRowEl('div', {class: 'row seating-row text-center'});
 	const numberRowBlock = createRowEl('div', {class: 'col-xs-1 row-number'});
 	const titleRow = createRowEl('h2', {class: ''}, rowNumber + 1);    
 	const threeSeatsBlock = createRowEl('div', {class: 'col-xs-5'});
 	const seat = createRowEl('div', {class: 'col-xs-4 seat'});
-	const seatLabel = createRowEl('span', {class: 'seat-label'});
+	const noSeat = createRowEl('div', {class: 'col-xs-4 no-seat'});
+    const seatLabel = createRowEl('span', {class: 'seat-label'});
+    
 	seat.appendChild(seatLabel);
 	threeSeatsBlock.appendChild(seat);
 	threeSeatsBlock.appendChild(seat.cloneNode(true));
@@ -55,23 +53,46 @@ function createRow(rowNumber) {
 	numberRowBlock.appendChild(titleRow);
 	row.appendChild(numberRowBlock);
 	row.appendChild(threeSeatsBlock);
-	row.appendChild(threeSeatsBlock.cloneNode(true));  
+    row.appendChild(threeSeatsBlock.cloneNode(true));  
+    row.dataset.rowNumber = rowNumber + 1;    
 	return row;
 }
 
-
 function parseScheme(scheme) {
-	const totalScheme = [];       
-	for (let i = 0; i < scheme.scheme.length; i++) {
-		totalScheme.push(createRow(i));     
-	}
-    
+	const totalScheme = scheme.scheme.map(createRow);
 	const toAddToScheme = totalScheme.reduce((fragment, currentValue) => {
 		fragment.appendChild(currentValue);
 		return fragment;
-        
 	}, document.createDocumentFragment());
+    
 	seatMapDiv.appendChild(toAddToScheme);
+    
+	const rowsAll = seatMapDiv.querySelectorAll(['data-row-number']);
+	console.log(rowsAll);
+	scheme.scheme.forEach((el, index) => {
+		switch (el) {
+		case '6':
+			rowsAll[index].querySelectorAll('.col-xs-4 seat').forEach((el, index) => {
+				el.querySelector('.seat-label').textContent = scheme.letters6[index];
+			});
+			break;
+		case '4':
+			rowsAll[index].querySelectorAll('.col-xs-4 seat').forEach((el, index) => {
+				if (index === 0 || index === 5) {
+					el.classList.remove('col-xs-4 seat');
+					el.classList.add('col-xs-4 no-seat');
+				}
+				el.querySelector('.seat-label').textContent = scheme.letters4[index - 1];
+			});
+			break;
+		case '0':
+			rowsAll[index].querySelectorAll('.col-xs-4 seat').forEach(el => {
+				el.classList.remove('col-xs-4 seat');
+				el.classList.add('col-xs-4 no-seat');
+			});
+			break;
+		}
+	});
 }
   
     

@@ -10,10 +10,20 @@ btnSetEmpty.disabled = true;
 btnSetFull.disabled = true;
 showSchemeBtn.addEventListener('click', showScheeme);
 
+const totalPax = document.querySelector('#totalPax');
+const totalAdult = document.querySelector('#totalAdult');
+const totalHalf = document.querySelector('#totalHalf');
+totalPax.textContent = 0;
+totalAdult.textContent = 0;
+totalHalf.textContent = 0;  
+
 const seatMapTitle = document.querySelector('#seatMapTitle');
 
 function showScheeme(event) {
-	seatMapDiv.textContent = '';
+    seatMapDiv.textContent = '';
+    totalPax.textContent = 0;
+    totalAdult.textContent = 0;
+    totalHalf.textContent = 0;   
 	event.preventDefault(); 
 	fetch(`https://neto-api.herokuapp.com/plane/${selectPlane.value}`)
 		.then(res => res.json())
@@ -114,13 +124,6 @@ function parseScheme(scheme) {
 	});
 }
   
-const totalPax = document.querySelector('#totalPax');
-totalPax.textContent = 0;
-const totalAdult = document.querySelector('#totalAdult');
-totalAdult.textContent = 0;
-const totalHalf = document.querySelector('#totalHalf');
-totalHalf.textContent = 0;
-
 seatMapDiv.addEventListener('click', bookSeat);
 
 function bookSeat(event) {
@@ -158,7 +161,7 @@ btnSetEmpty.addEventListener('click', clearAllBook);
 function bookAll(e) {
 	e.preventDefault();
 	seatMapDiv.querySelectorAll('[data-click-number]').forEach(e => {
-		if (!e.classList.contains('no-seat')) {
+		if (!(e.classList.contains('no-seat') && e.classList.contains('adult') && e.classList.contains('half'))) {
 			e.classList.add('adult');
 			totalPax.textContent++;	
 			totalAdult.textContent++; 

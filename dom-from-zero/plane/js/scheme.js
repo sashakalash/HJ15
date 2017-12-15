@@ -20,10 +20,10 @@ totalHalf.textContent = 0;
 const seatMapTitle = document.querySelector('#seatMapTitle');
 
 function showScheeme(event) {
-    seatMapDiv.textContent = '';
-    totalPax.textContent = 0;
-    totalAdult.textContent = 0;
-    totalHalf.textContent = 0;   
+	seatMapDiv.textContent = '';
+	totalPax.textContent = 0;
+	totalAdult.textContent = 0;
+	totalHalf.textContent = 0;   
 	event.preventDefault(); 
 	fetch(`https://neto-api.herokuapp.com/plane/${selectPlane.value}`)
 		.then(res => res.json())
@@ -161,7 +161,12 @@ btnSetEmpty.addEventListener('click', clearAllBook);
 function bookAll(e) {
 	e.preventDefault();
 	seatMapDiv.querySelectorAll('[data-click-number]').forEach(e => {
-		if (!(e.classList.contains('no-seat') && e.classList.contains('adult') && e.classList.contains('half'))) {
+		if (!e.classList.contains('no-seat')) {
+			if (e.classList.contains('half')) {
+				e.classList.remove('half');
+                totalAdult.textContent--; 
+                totalPax.textContent--;	
+			}
 			e.classList.add('adult');
 			totalPax.textContent++;	
 			totalAdult.textContent++; 

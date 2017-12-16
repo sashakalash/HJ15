@@ -160,13 +160,9 @@ btnSetEmpty.addEventListener('click', clearAllBook);
 
 function bookAll(e) {
 	e.preventDefault();
+	clearAllBook(e);
 	seatMapDiv.querySelectorAll('[data-click-number]').forEach(e => {
 		if (!e.classList.contains('no-seat')) {
-			if (e.classList.contains('half')) {
-				e.classList.remove('half');
-                totalAdult.textContent--; 
-                totalPax.textContent--;	
-			}
 			e.classList.add('adult');
 			totalPax.textContent++;	
 			totalAdult.textContent++; 

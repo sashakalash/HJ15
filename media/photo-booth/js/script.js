@@ -87,7 +87,7 @@ function makeChangeToPhoto(event) {
 			const imgToSend = new FormData();
 			imgToSend.append('image', blob);
 			console.log(imgToSend)
-			xhr.send(blob);   
+			xhr.send(imgToSend);   
 		});
 		
 		// xhr.send(imgToSend);  

@@ -86,7 +86,7 @@ function makeChangeToPhoto(event) {
 		xhr.send(imgToSend);  
 	}
 	if (event.target.textContent === 'delete') {
-		const elToRemove = event.target.parentElement.parentElement.parentElement;     
+		const elToRemove = event.target.parentNode.parentNode.parentNode;     
 		listPic.removeChild(elToRemove);
 	}
 }

@@ -1,6 +1,5 @@
 'use strict';
 
-const constraints = {video: true, audio: false};
 const errorMessage = document.querySelector('#error-message');
 const takePhotoBtn = document.querySelector('#take-photo');
 takePhotoBtn.addEventListener('click', getPhoto);
@@ -19,7 +18,6 @@ const ctx = canvas.getContext('2d');
 
 const listPic = document.querySelector('.list');
 const controls = document.querySelector('.controls');
-
 
 navigator.mediaDevices
 	.getUserMedia({video: true, audio: false})
@@ -80,22 +78,11 @@ function makeChangeToPhoto(event) {
 	if (event.target.textContent === 'file_upload') {
 		const xhr = new XMLHttpRequest();
 		xhr.open('POST', 'https://neto-api.herokuapp.com/photo-booth', true);
-		xhr.setRequestHeader('Content-Type', 'multipart/form-data');
-		// const imgSrc = event.target.parentElement.previousElementSibling.href;  
-		console.log(canvas)
 		canvas.toBlob(blob => {
 			const imgToSend = new FormData();
 			imgToSend.append('image', blob);
-			console.log(imgToSend)
 			xhr.send(imgToSend);   
 		});
-		
-		// xhr.send(imgToSend);  
-        
-		//ни один, ни второй способ не пропускает изображение на сервер, 
-		// возможно из-за использования мной режима disable web security для chrome
-		// без которого не запускается трансляция видео локально
-
 	}
 	if (event.target.textContent === 'delete') {
 		const elToRemove = event.target.parentNode.parentNode.parentNode;     

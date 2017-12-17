@@ -73,6 +73,7 @@ function getPhoto() {
 	ctx.drawImage(cameraWindow, 0, 0);
 	setImg(canvas.toDataURL());
 }
+
 listPic.addEventListener('click', makeChangeToPhoto);
 
 function makeChangeToPhoto(event) {
@@ -81,9 +82,14 @@ function makeChangeToPhoto(event) {
 		xhr.open('POST', 'https://neto-api.herokuapp.com/photo-booth', true);
 		xhr.setRequestHeader('Content-Type', 'multipart/form-data');
 		// const imgSrc = event.target.parentElement.previousElementSibling.href;  
-		canvas.toBlob(blob => xhr.send(blob));      
-		// const imgToSend = new FormData();
-		// imgToSend.append('image', imgSrc);    
+		console.log(canvas)
+		canvas.toBlob(blob => {
+			const imgToSend = new FormData();
+			imgToSend.append('image', blob);
+			console.log(imgToSend)
+			xhr.send(blob);   
+		});
+		
 		// xhr.send(imgToSend);  
         
 		//ни один, ни второй способ не пропускает изображение на сервер, 

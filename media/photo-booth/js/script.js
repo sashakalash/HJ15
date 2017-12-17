@@ -85,6 +85,11 @@ function makeChangeToPhoto(event) {
 		// const imgToSend = new FormData();
 		// imgToSend.append('image', imgSrc);    
 		// xhr.send(imgToSend);  
+        
+		//ни один, ни второй способ не пропускает изображение на сервер, 
+		// возможно из-за использования мной режима disable web security для chrome
+		// без которого не запускается трансляция видео локально
+
 	}
 	if (event.target.textContent === 'delete') {
 		const elToRemove = event.target.parentNode.parentNode.parentNode;     

@@ -80,10 +80,11 @@ function makeChangeToPhoto(event) {
 		const xhr = new XMLHttpRequest();
 		xhr.open('POST', 'https://neto-api.herokuapp.com/photo-booth', true);
 		xhr.setRequestHeader('Content-Type', 'multipart/form-data');
-		const imgSrc = event.target.parentElement.previousElementSibling.href;        
-		const imgToSend = new FormData();
-		imgToSend.append('image', imgSrc);    
-		xhr.send(imgToSend);  
+		// const imgSrc = event.target.parentElement.previousElementSibling.href;  
+		canvas.toBlob(blob => xhr.send(blob));      
+		// const imgToSend = new FormData();
+		// imgToSend.append('image', imgSrc);    
+		// xhr.send(imgToSend);  
 	}
 	if (event.target.textContent === 'delete') {
 		const elToRemove = event.target.parentNode.parentNode.parentNode;     

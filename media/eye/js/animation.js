@@ -2,13 +2,13 @@
 
 const eye = document.querySelector('.big-book__eye');
 const pupil = document.querySelector('.big-book__pupil');
-var eyeTop = eye.getBoundingClientRect().top;
-var eyeBottom = eye.getBoundingClientRect().bottom;
-var eyeLeft = eye.getBoundingClientRect().left;
-var eyeRight = eye.getBoundingClientRect().right;
-var windowHeight = document.documentElement.clientHeight;
-var windowWidth = document.documentElement.clientWidth;
-var pupilMoveLimitX = 30, pupilMoveLimitY = 30;
+let eyeTop = eye.getBoundingClientRect().top;
+let eyeBottom = eye.getBoundingClientRect().bottom;
+let eyeLeft = eye.getBoundingClientRect().left;
+let eyeRight = eye.getBoundingClientRect().right;
+let windowHeight = document.documentElement.clientHeight;
+let windowWidth = document.documentElement.clientWidth;
+let pupilMoveLimitX = 30, pupilMoveLimitY = 30;
 
 window.addEventListener('resize', getNewCoord);
 window.addEventListener('scroll', getNewCoord);

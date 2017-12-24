@@ -57,11 +57,15 @@ function record(app, config, limit) {
 					app.preview.srcObject = null;
 					stream.getTracks().forEach(track => track.stop());
 					const recorded = new Blob(chunks, {'type' : recorder.mimeType});
+					const objToSend = {video: recorded, frame: ''};
+					createThumbnail(recorded)
+						.then(data => {
+							objToSend.frame = data;
+							done(objToSend);
+						});
+					
 					chunks = null;
 					recorder = stream = null;
-					const snapshot = createThumbnail(recorded);
-					done({video: recorded, frame: snapshot});
-					fail((e) => new Error(e));
 				});
 				recorder.start(1000);
 				setTimeout(() => {

@@ -6,7 +6,7 @@ const circleArr = [];
 const crossArr = [];
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-const starsSum = Math.round(getRand(50, 200));
+const starsSum = Math.round(getRand(5, 200));
 
 function getRand(min, max) {
 	return Math.random() * (max - min) + min;
@@ -34,9 +34,13 @@ class getObj {
 		size = getRand(0.1, 0.6),
 		angle = getRand(0, 360),
 		speed = getRand(-0.2, 0.2),
-		timeFunc = timeFuncArr[Math.round(getRand(0, 1))]) {
+		timeFunc = timeFuncArr[Math.round(getRand(0, 1))],
+		startX = 0,
+		startY = 0) {
 		this.x = xPos;
 		this.y = yPos;
+		this.startX = startX;
+		this.startY = startY;		
 		this.size = size;
 		this.angle = Math.round(angle * PI / 180);
 		this.rotateSpeed = speed;
@@ -58,11 +62,16 @@ class getObj {
 		ctx.lineTo(this.x + 20 * this.size, this.y);
 		ctx.moveTo(this.x + 10 * this.size, this.y - 10 * this.size);
 		ctx.lineTo(this.x + 10 * this.size, this.y + 10 * this.size);
-		ctx.translate(this.x, this.y);
+		ctx.save();
+		ctx.translate(this.startX, this.startY);
 		ctx.rotate(this.angle * this.rotateSpeed);
-		ctx.stroke();
-		ctx.translate(-this.x, -this.y);		
+		
+		ctx.stroke();	
+		ctx.translate(-this.startX, -this.startY);
+		
+		ctx.restore();
 		return this;
+		
 	}
 	
 }
@@ -84,15 +93,26 @@ function getStaticBackground() {
 
 getStaticBackground();
 
+
 function getNewBackground(array, isCircle) {
+	let startX, startY;
 	for (let i = 0; i < array.length; i++) {
 		const item = array[i];
-		const newCoord = item.timeFunc(item.x, item.y, Date.now());
+		const func = item.timeFunc;
+		if (item.startX === 0) {
+			startX = item.x;
+			startY = item.y;
+		} else {
+			startX = item.startX;
+			startY = item.startY;
+		}
+		const newCoord = func(startX, startY, Date.now());
 		const x = newCoord.x;
 		const y = newCoord.y;
 		const size = item.size;
 		const angle = item.angle;
-		const newItem = new getObj(x, y, size, angle);
+		const speed = item.speed;
+		const newItem = new getObj(x, y, size, angle, speed, func, startX, startY);
 		if (isCircle) {
 			newItem.getCircle();
 		} else {

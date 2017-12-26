@@ -36,16 +36,6 @@ canvas.addEventListener('mousemove', (evt) => {
 	if (!isDraw) {
 		return;
 	}
-	imgPointsArr.push({x: evt.pageX, y: evt.pageY});
-	drawImg(imgPointsArr);
-});
-
-function drawLineBetweenPoints(begin, end) {
-	ctx.quadraticCurveTo(begin.x, begin.y, end.x, end.y);
-}
-
-function drawImg(imgPointsArr) {
-	ctx.beginPath();
 	if (isShift) {
 		hue === 0? hue = 0: hue--;
 	} else {
@@ -57,16 +47,26 @@ function drawImg(imgPointsArr) {
 		direction = false;
 		lineRadius > 0? lineRadius--: direction = true;
 	}
-	ctx.lineWidth = lineRadius;
-    
-	ctx.strokeStyle = `hsl(${hue}, 100%, 50%)`;
+	imgPointsArr.push({x: evt.pageX, y: evt.pageY, hue: hue, lineRadius: lineRadius});
+	drawImg(imgPointsArr);
+});
+
+function drawLineBetweenPoints(begin, end) {
+	ctx.beginPath();
+	ctx.lineWidth = begin.lineRadius;
+	ctx.strokeStyle = `hsl(${begin.hue}, 100%, 50%)`;
 	ctx.lineJoin = 'round';
 	ctx.lineCap = 'round';
+	ctx.quadraticCurveTo(begin.x, begin.y, end.x, end.y);
+	ctx.stroke();
+	ctx.closePath();
+}
+
+function drawImg(imgPointsArr) {
 	ctx.moveTo(imgPointsArr[0].x, imgPointsArr[0].y);
 	for (let i = 1; i < imgPointsArr.length - 1; i++) {
 		drawLineBetweenPoints(imgPointsArr[i], imgPointsArr[i + 1]);
 	}
-	ctx.stroke();
 }
 
 canvas.addEventListener('mouseup', () => {

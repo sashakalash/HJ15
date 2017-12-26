@@ -25,6 +25,7 @@ connectionChat.addEventListener('open', () => {
 	messageStatusToRemove.parentElement.removeChild(messageStatusToRemove);
 	chatStatus.textContent = chatStatus.dataset.online;
 	sendMessBtn.disabled = false;
+	inputMessForm.disabled = false;
 });
 
 const messageAnotherUser = Array.from(document.querySelectorAll('.message'))
@@ -63,6 +64,7 @@ newMessageForm.addEventListener('submit', (event) => {
 connectionChat.addEventListener('close', () => {
 	chatStatus.textContent = chatStatus.dataset.offline;
 	sendMessBtn.disabled = true;
+	inputMessForm.disabled = true;
 	messagesContent.appendChild(messageStatus.cloneNode(true));	
 });
 

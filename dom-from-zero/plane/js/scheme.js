@@ -130,24 +130,28 @@ function bookSeat(event) {
 	if (event.target.classList.contains('no-seat')) {
 		return;
 	}
-	if (event.target.dataset.clickNumber) {
-		if (event.target.classList.contains('half') || event.target.classList.contains('adult')) {
-			if (event.target.classList.contains('half')) {
-				event.target.classList.remove('half');
+	if (event.target.dataset.clickNumber || event.target.classList.contains('seat-label')) {
+		let currentEl = event.target;
+		if (currentEl.classList.contains('seat-label')) {
+			currentEl = currentEl.parentElement;
+		}
+		if (currentEl.classList.contains('half') || currentEl.classList.contains('adult')) {
+			if (currentEl.classList.contains('half')) {
+				currentEl.classList.remove('half');
 				totalPax.textContent--;
 				totalHalf.textContent--;
 			} else {
-				event.target.classList.remove('adult');
+				currentEl.classList.remove('adult');
 				totalPax.textContent--;
 				totalAdult.textContent--;
 			}
 		} else {
 			if (event.altKey) {
-				event.target.classList.add('half');
+				currentEl.classList.add('half');
 				totalPax.textContent++;	
 				totalHalf.textContent++;
 			} else {
-				event.target.classList.add('adult');    
+				currentEl.classList.add('adult');    
 				totalPax.textContent++;	
 				totalAdult.textContent++;        
 			}

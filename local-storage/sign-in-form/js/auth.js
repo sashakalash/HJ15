@@ -1,6 +1,7 @@
 'use strict';
 const signIn = document.querySelector('.sign-in-htm');
 const signUp = document.querySelector('.sign-up-htm');
+let isFirstSingIn = true;
 
 signIn.addEventListener('change', auth);
 signUp.addEventListener('change', auth);
@@ -22,7 +23,8 @@ function auth(event) {
 		} else {
 			message += answer.name + ' успешно ';
 			message += isSignUp? 'зарегистрирован': 'авторизирован';
-			messField.textContent =  message;       
+			messField.textContent =  message;    
+			isFirstSingIn = false;			
 		}
 	});
 	if (isSignUp) {
@@ -34,11 +36,15 @@ function auth(event) {
 	dataRequest.setRequestHeader('Content-Type', 'application/json');	
 	dataField.addEventListener('submit', (event) => {
 		event.preventDefault();
-		let form = new FormData(event.target);
-		let object = {};
-		form.forEach(function(value, key){
-			object[key] = value;
-		});
-		dataRequest.send(JSON.stringify(object));	
+		if (isFirstSingIn) {
+			let form = new FormData(event.target);
+			let object = {};
+			form.forEach(function(value, key){
+				object[key] = value;
+			});
+			dataRequest.send(JSON.stringify(object));
+		} else {
+			messField.textContent = isSignUp? 'Пользователь уже зарегистрирован': 'Пользователь уже авторизирован';
+		}
 	});
 }

@@ -57,18 +57,17 @@ class getObj {
 	}
 	
 	getСross() {
-		ctx.beginPath();			
+		ctx.beginPath();
+		ctx.save();
+		ctx.translate(this.startX, this.startY);
+		ctx.rotate(this.angle * this.rotateSpeed);
 		ctx.moveTo(this.x, this.y);
 		ctx.lineTo(this.x + 20 * this.size, this.y);
 		ctx.moveTo(this.x + 10 * this.size, this.y - 10 * this.size);
 		ctx.lineTo(this.x + 10 * this.size, this.y + 10 * this.size);
-		ctx.save();
-		ctx.translate(this.startX, this.startY);
-		ctx.rotate(this.angle * this.rotateSpeed);
-		
+		ctx.lineWidth = 5 * this.size;
 		ctx.stroke();	
 		ctx.translate(-this.startX, -this.startY);
-		
 		ctx.restore();
 		return this;
 		
